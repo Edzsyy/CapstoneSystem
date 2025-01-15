@@ -1,0 +1,180 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
+:root{
+    --color-1: #bee9e8;
+    --color-2: #62b6cb;
+    --color-3: #1b4965;
+    --color-4: #cae9ff;
+    --color-5: #5fa8d3;
+    --color-primary: #7380ec;
+    --color-danger: #ff7782;
+    --color-success: #41f1b6;
+    --color-warning: #ffbb55;
+}
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+}
+body{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: url('../image/background.jpg') no-repeat;
+    background-size: cover;
+    background-position: center;
+}
+.container{
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.form{
+    max-width: 430px;
+    width: 100%;
+    padding: 20px;
+    border-radius: 6px;
+    background: var(--color-4);
+}
+.alert{
+    font-size: 12px;
+    background: #f2dede;    
+    color: #a94442;
+    padding: 10px;
+    width: 100%;
+    border-radius: 5px;
+    margin: auto;
+}
+.alert button{
+    position: absolute;
+    top: 50%;
+    right: 15px;
+    transform: translateY(-15%);
+    font-size: 13px;
+    color: #8b8b8b;
+    cursor: pointer;
+    padding: 5px;
+}
+header{
+    font-size: 28px;
+    font-weight: 600;
+    color: #000;
+    text-align: center;
+}
+.message{
+    margin: 5px 0;
+    width: 100%;
+    border-radius: 5px;
+    padding: 10px;
+}
+form{
+    margin-top: 30px;
+}
+form .input-group{
+    position: relative;
+    height: 50px;
+    width: 100%;
+    margin-top: 20px;
+}
+.input-group input{
+    height: 100%;
+    width: 100%;
+    border: none;
+    font-size: 16px;
+    font-weight: 400;
+    padding: 0 15px;
+    border: 1px solid #cacaca;
+    border-radius: 10px;
+}
+form .button{
+    height: 45px;
+    width: 100%;
+    margin-top: 20px;
+}
+.button input{
+    height: 100%;
+    width: 100%;
+    border: none;
+    font-size: 16px;
+    font-weight: 500;
+    padding: 0 15px;
+    border: 1px solid #cacaca;
+    border-radius: 10px;
+    background: #3b7ffd;
+    color: #fff;
+    cursor: pointer;
+    transition: all .3s ease;
+}
+.button input:hover{
+    background: #0000c6;
+    color: #fff;
+}
+.eye-icon{
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    font-size: 18px;
+    color: #8b8b8b;
+    cursor: pointer;
+    padding: 5px;
+}
+.form-link{
+    text-align: center;
+    margin-top: 10px;
+}
+.form-link span,
+.form-link span a{
+    font-size: 14px;
+    font-weight: 400;
+}
+.form a{
+    text-decoration: none;
+}
+.form a:hover{
+    text-decoration: underline;
+}
+.line{
+    position: relative;
+    height: 1px;
+    width: 100%;
+    margin: 30px 0;
+    background-color: #dadada;
+}
+.line::before{
+    content: 'or';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: var(--color-4);
+    color: #232836;
+    padding: 0 15;
+}
+.media-option{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.media-option .facebook-link,
+.media-option .google-link{
+    margin: 0 40px;
+    cursor: pointer;
+    border: none;
+    font-size: 25px;
+    padding: 5px 10px 5px 10px;
+    border: 1px solid #cacaca;
+    border-radius: 50%;
+    background: #3b7ffd;
+    color: #fff;
+    cursor: pointer;
+    transition: all .3s ease;
+}
+.media-option .facebook-link:hover,
+.media-option .google-link:hover{
+    background: #0000c6;
+    color: #fff;
+}

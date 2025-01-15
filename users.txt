@@ -1,0 +1,188 @@
+admin account
+admin@mail.com
+admin123
+==============================================================
+
+employee account
+edgeniel@mail.com
+123456789
+==============================================================
+
+user account
+ed@mail.com
+123456789
+
+
+
+
+<?php 
+session_start();
+include('./assets/config/dbconn.php');
+
+if (isset($_POST['login'])) {
+    $email = mysqli_real_escape_string($conn, $_POST['email']);
+    $password = $_POST['password'];
+
+    // Check all three tables for the user
+    $role_as = null; // Initialize the role_as variable
+    $userDetails = null; // Initialize user details variable
+
+    // Array of tables to check
+    $tables = [
+        'users' => 'SELECT id, fname, lname, email, password, role_as FROM users WHERE email = ?',
+        'employee' => 'SELECT id, fname, lname, email, password, role_as FROM employee WHERE email = ?',
+        'admin' => 'SELECT id, fname, lname, email, password, role_as FROM admin WHERE email = ?'
+    ];
+
+    foreach ($tables as $table => $query) {
+        $stmt = $conn->prepare($query);
+        $stmt->bind_param("s", $email);
+        $stmt->execute();
+        $stmt->store_result();
+
+        if ($stmt->num_rows === 1) {
+            $stmt->bind_result($user_id, $user_fname, $user_lname, $user_email, $hashedPassword, $role_as);
+            $stmt->fetch();
+            $userDetails = [$user_id, $user_fname, $user_lname, $user_email, $hashedPassword, $role_as];
+            break; // Exit the loop if user is found
+        }
+    }
+
+    // Check if user was found in any of the tables
+    if ($userDetails) {
+        list($user_id, $user_fname, $user_lname, $user_email, $hashedPassword, $role_as) = $userDetails;
+        return handleLogin($user_id, $user_fname, $user_lname, $user_email, $hashedPassword, $role_as, $password);
+    } else {
+        // If not found in any tables
+        $_SESSION['message'] = "Invalid Email or User not found";
+        header('location: login.php');
+        exit(0);
+    }
+}
+
+// Function to handle login
+function handleLogin($user_id, $user_fname, $user_lname, $user_email, $hashedPassword, $role_as, $password) {
+    if (password_verify($password, $hashedPassword)) {
+        // Successful login
+        $_SESSION['auth'] = true;
+        $_SESSION['auth_role'] = $role_as;
+        $_SESSION['auth_user'] = [
+            'user_id' => $user_id,
+            'user_name' => $user_fname . ' ' . $user_lname,
+            'user_email' => $user_email,
+        ];
+
+        // Redirect based on role
+        header('location: ' . redirectToRole($role_as));
+        exit(0);
+    } else {
+        // Invalid password
+        $_SESSION['message'] = "Incorrect Email or Password";
+        header('location: login.php');
+        exit(0);
+    }
+}
+
+// Function to redirect based on user role
+function redirectToRole($role_as) {
+    switch ($role_as) {
+        case '2': // Admin
+            return './admin/index.php'; // Admin dashboard
+        case '1': // Employee
+            return './employee/index.php'; // Employee dashboard
+        case '0': // User
+            return './user/index.php'; // User dashboard
+        default:
+            return 'login.php'; // Fallback
+    }
+}
+?>  // login form both user 
+
+
+<?php 
+session_start();
+include('./assets/config/dbconn.php');
+
+// Function to redirect based on user role
+function redirectToRole($role_as) {
+    switch ($role_as) {
+        case '2': // Admin
+            return './admin/index.php';
+        case '1': // Employee
+            return './employee/index.php';
+        case '0': // User
+            return './user/index.php';
+        default:
+            return 'login.php'; // Fallback
+    }
+}
+
+// Check if the user has reached the maximum login attempts
+function checkLoginAttempts($conn, $email) {
+    // Example logic, you should have a table or session to track login attempts
+    // $max_attempts = 5;
+    // $stmt = $conn->prepare("SELECT attempts FROM login_attempts WHERE email = ?");
+    // $stmt->bind_param("s", $email);
+    // $stmt->execute();
+    // $stmt->bind_result($attempts);
+    // $stmt->fetch();
+    // return $attempts >= $max_attempts;
+}
+
+if (isset($_POST['login'])) {
+    $email = mysqli_real_escape_string($conn, $_POST['email']);
+    $password = $_POST['password'];
+
+    // Check for login attempts before querying
+    if (checkLoginAttempts($conn, $email)) {
+        $_SESSION['message'] = "Too many failed login attempts. Please try again later.";
+        header('location: login.php');
+        exit(0);
+    }
+
+    // Array of tables to check
+    $tables = [
+        'users' => 'SELECT id, fname, lname, email, password, role_as FROM users WHERE email = ?',
+        'employee' => 'SELECT id, fname, lname, email, password, role_as FROM employee WHERE email = ?',
+        'admin' => 'SELECT id, fname, lname, email, password, role_as FROM admin WHERE email = ?'
+    ];
+
+    foreach ($tables as $table => $query) {
+        $stmt = $conn->prepare($query);
+        $stmt->bind_param("s", $email);
+        $stmt->execute();
+        $stmt->store_result();
+
+        if ($stmt->num_rows === 1) {
+            $stmt->bind_result($user_id, $user_fname, $user_lname, $user_email, $hashedPassword, $role_as);
+            $stmt->fetch();
+            if (password_verify($password, $hashedPassword)) {
+                // Successful login
+                session_regenerate_id(true); // Regenerate session ID
+                $_SESSION['auth'] = true;
+                $_SESSION['auth_role'] = $role_as;
+                $_SESSION['auth_user'] = [
+                    'user_id' => $user_id,
+                    'user_name' => $user_fname . ' ' . $user_lname,
+                    'user_email' => $user_email,
+                ];
+
+                // Redirect based on role
+                header('location: ' . redirectToRole($role_as));
+                exit(0);
+            } else {
+                // Invalid password
+                $_SESSION['message'] = "Incorrect Email or Password";
+                // Log failed attempt here
+                header('location: login.php');
+                exit(0);
+            }
+        }
+    }
+
+    // If not found in any tables
+    $_SESSION['message'] = "Invalid Email or User not found";
+    header('location: login.php');
+    exit(0);
+}
+?> security ###

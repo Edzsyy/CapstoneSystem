@@ -1,0 +1,18 @@
+admin account
+admin@mail.com
+admin123
+==============================================================
+
+employee account
+edgeniel@mail.com
+123456789
+
+foreducation49@gmail.com
+123456789
+==============================================================
+user account
+ed@mail.com
+123456789
+
+mark@mail.com
+123456789

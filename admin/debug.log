@@ -1,0 +1,78 @@
+POST Data: Array
+(
+    [viewid] => 11
+    [document_status] => Rejected
+)
+
+POST Data: Array
+(
+    [viewid] => 87
+    [document_status] => Rejected
+)
+
+POST Data: Array
+(
+    [viewid] => 1
+    [document_status] => Rejected
+)
+
+POST Data: Array
+(
+    [viewid] => 1
+    [document_status] => Approved
+)
+
+POST Data: Array
+(
+    [viewid] => 1
+    [document_status] => Approved
+)
+
+POST Data: Array
+(
+    [viewid] => 1
+    [document_status] => Approved
+)
+
+POST Data: Array
+(
+    [viewid] => 15
+    [document_status] => Approved
+)
+
+POST Data: Array
+(
+    [viewid] => 11
+    [document_status] => Approved
+)
+
+POST Data: Array
+(
+    [viewid] => 79
+    [document_status] => Approved
+)
+
+POST Data: Array
+(
+    [viewid] => 79
+    [document_status] => Approved
+)
+
+POST Data: Array
+(
+    [viewid] => 79
+    [document_status] => Approved
+)
+
+POST Data: Array
+(
+    [viewid] => 80
+    [document_status] => Approved
+)
+
+POST Data: Array
+(
+    [viewid] => 82
+    [document_status] => Approved
+)
+

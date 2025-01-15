@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-----boxicons (for icons) -----> 
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <!-----style-----> 
+    <link rel="stylesheet" href="./assets/css/style.css">
+    <title>Login</title>
+</head>
+<body>
+    <section class="container">
+        <div class="form">
+            <?php include('message.php'); ?>
+            <div class="form-content">
+                <header>Login</header>
+
+                <form action="login.php" method="post">
+                    <div class="input-group">
+                        <input type="email" name="email" id="email" placeholder="Email" required>
+                    </div>
+
+                    <div class="input-group">
+                        <input type="password" name="password" id="password" placeholder="Password" required>
+                        <i class='bx bx-hide eye-icon' id="togglePassword" style="cursor: pointer;"></i>
+                    </div>
+
+                    <div class="form-link">
+                        <a href="" class="forgot-password">Forgot Password?</a>
+                    </div>
+
+                    <div class="button">
+                        <input type="submit" class="btn" value="Login" name="login">
+                    </div>
+
+                    <div class="form-link">
+                        <span>Already have an account? <a href="register.php" class="signup-link">Sign Up</a></span>
+                    </div>
+                </form>
+            </div>
+
+            <div class="line"></div>
+
+            <div class="media-option">
+                <a href="https://www.facebook.com/" class="facebook-link">
+                    <i class='bx bxl-facebook facebook-icon'></i>
+                </a>
+                <a href="https://myaccount.google.com/" class="google-link">
+                    <i class='bx bxl-google google-icon'></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- JavaScript for Toggle Password Visibility -->
+    <script>
+        const togglePassword = document.querySelector('#togglePassword');
+        const password = document.querySelector('#password');
+
+        togglePassword.addEventListener('click', function (e) {
+            // toggle the type attribute of password field
+            const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+            password.setAttribute('type', type);
+
+            // toggle the icon between bx-hide and bx-show
+            this.classList.toggle('bx-show');
+        });
+    </script>
+</body>
+</html>

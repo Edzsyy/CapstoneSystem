@@ -1,0 +1,492 @@
+include('../user/assets/inc/header.php');
+include('../user/assets/inc/sidebar.php');
+include('../user/assets/inc/navbar.php');
+
+
+// pwede ganito gawin mo sa file location header 
+if ($pic_uploaded == 1)
+    {
+        $sql = "INSERT INTO registration (fname, mname, lname, address, zip, business_name, phone, email, com_address, building_name, 
+                building_no, street, barangay, product, registered_name, rent_per_month, period_date, date_application, or_date,
+                amount_paid, picture) VALUES ('$fname', '$mname', '$lname', '$address', '$zip', '$business_name', '$phone', '$email', 
+                '$com_address', '$building_name', '$building_no', '$street', '$barangay', '$product', '$registered_name', 
+                '$rent_per_month', '$period_date', '$date_application', '$or_date', '$amount_paid', '$picture')";
+
+        $result = mysqli_query($conn, $sql);
+        
+        if ($result) {
+            header("location: ./user_registration_list.php");
+            exit(0);
+        } else {
+            $_SESSION['message'] = "Database Error: " . mysqli_error($conn);
+            error_log("Database error: " . mysqli_error($conn), 0); // Log the error
+            header('location: https://businesspermit.unifiedlgu.com/register.php'); // ito ang example na pwede mo gawin para ma punta don sa gusto niya puntahan 
+            exit(0);
+        }
+    }
+
+
+
+    // bukas namn na tau sa bug nato 
+
+
+
+
+    <?php 
+include('../user/assets/config/dbconn.php');
+
+include('../user/assets/inc/header.php');
+
+include('../user/assets/inc/sidebar.php');
+
+include('../user/assets/inc/navbar.php');
+
+?> 
+
+
+
+<!---QR code-->
+<div class="modal fade" id="qrcodeModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">QR Code</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <script src="../user/assets/js/html5-qrcode.min.js"></script>
+
+                <style>
+                .result {
+                    background-color: green;
+                    color: #fff;
+                    padding: 20px;
+                }
+                .row {
+                    display: flex;
+                }
+                table {
+                    width: 100%;
+                    border-collapse: collapse;
+                }
+                th, td {
+                    padding: 10px;
+                    border: 1px solid #ddd;
+                }
+                </style>
+
+
+
+                <div class="row">
+                    <div class="col">
+                        <div style="width: 470px;" id="reader"></div>
+                    </div>
+                    <div class="col" style="padding: 20px;">
+                        <h4>SCAN RESULT</h4>
+                        <div id="result">Result Here</div>
+                    </div>
+                </div>
+
+                <script type="text/javascript">
+                function onScanSuccess(qrCodeMessage) 
+                {
+                    // Extract application ID from QR code message
+                    const ApplicationIDMatch = qrCodeMessage.match(/ApplicationID:(\d{11})/);
+                    if (applicationIdMatch) 
+                    {
+                        const application_id = ApplicationIDMatch[1];
+                        fetchDataFromServer(application_id);
+                    } 
+                    else 
+                    {
+                        document.getElementById('result').innerHTML = '<span class="result">QR code does not contain valid application ID</span>';
+                    }
+                }
+
+                function onScanError(errorMessage) 
+                {
+                    // Handle scan error
+                    console.error('Scan error:', errorMessage);
+                }
+
+                function fetchDataFromServer(application_id) 
+                {
+                    fetch('fetch_data.php', 
+                    {
+                        method: 'POST',
+                        headers: 
+                        {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: new URLSearchParams
+                        ({
+                            'application_id': application_id
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(data => 
+                    {
+                        renderDataInTable(data);
+                    })
+                    .catch(error => console.error('Error:', error));
+                }
+
+                function renderDataInTable(data) 
+                {
+                    if (!data || data.length === 0) 
+                    {
+                        document.getElementById('result').innerHTML = '<span class="result">No data found</span>';
+                        return;
+                    }
+
+                    let table = '<table>';
+                    table += '<tr><th>Application ID</th><th>Owner</th><th>Business Name</th><th>Business Type</th><th>Address</th><th>Status</th></tr>';
+
+                    data.forEach(row => 
+                    {
+                        table += `<tr>
+                            <td>${row.application_id}</td>
+                            <td>${row.owner_name}</td>
+                            <td>${row.business_name}</td>
+                            <td>${row.business_type}</td>
+                            <td>${row.address}</td>
+                            <td>${row.status}</td>
+                        </tr>`;
+                    });
+
+                    table += '</table>';
+
+                    document.getElementById('result').innerHTML = table;
+                }
+
+                var html5QrcodeScanner = new Html5QrcodeScanner(
+                    "reader", { fps: 10, qrbox: 250 });
+                html5QrcodeScanner.render(onScanSuccess, onScanError);
+                </script>
+
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="qrcode()">Submit</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!---end QR code-->
+
+
+
+<div class="data-card">
+    <div class="card">
+        <div class="card-header">
+            <h4>Registration List
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-primary float-end" data-bs-toggle="modal" data-bs-target="#qrcodeModal">
+                    <i class='bx bx-qr-scan'></i>
+                </button>
+            </h4>
+        </div>
+
+
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <div id="displayDataTable">
+                        <!-- user_registration_and_renewal_list_displaydata -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<?php 
+include('../user/assets/inc/footer.php');
+?> 
+
+
+<script>
+    $(document).ready(function()
+    {
+        displayData();
+    });
+    //display function
+    function displayData()
+    {
+        var displayData="true";
+        $.ajax
+        ({
+            url:"./user_registration_list_displaydata.php",
+            type:'post',
+            data:{
+                displaysend:displayData
+            },
+            success:function(data,status)
+            {
+                $('#displayDataTable').html(data);
+                $('#updateModal').modal('hide');
+            }
+        });
+    }
+
+
+
+
+    //delete function
+    function deleteuser(deleteid)
+    {
+        $.ajax({
+            url:"./user_registration_list_delete.php",
+            type:'post',
+            data:{
+                deletesend:deleteid
+            },
+            success:function(data,status){
+                //console.log(status);
+                displayData();
+            }
+        });
+    }
+
+
+    
+    
+
+</script>
+
+
+</body>
+</html>
+
+
+
+
+<?php 
+include('../user/assets/config/dbconn.php');
+include('../user/assets/inc/header.php');
+include('../user/assets/inc/sidebar.php');
+include('../user/assets/inc/navbar.php');
+?> 
+
+<!-- Data info -->
+<div class="data-card">
+    <div class="card">
+        <div class="card-header">
+            <h4>Business List</h4>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <div id="displayBusinessDataTable">
+                        <!-- Business data will be displayed here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<?php 
+include('../user/assets/inc/footer.php');
+?> 
+
+<script>
+$(document).ready(function() {
+    displayBusinessData(); // Initial load for business data
+});
+
+// Function to fetch business data
+function displayBusinessData() {
+    $.ajax({
+        url: "fetch_business_data.php", // Fetch updated business data
+        type: 'GET',
+        dataType: 'json',
+        success: function(data) {
+            let displayHTML = `<table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Business Name</th>
+                        <th>Business Address</th>
+                        <th>Business Type</th>
+                        <th>Date Approved</th>
+                        <th>Date Expiration</th>
+                        <th>Status</th>
+                        <th>Renewal Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>`;
+
+            const currentDate = new Date();
+
+            data.forEach(business => {
+                const expirationDate = new Date(business.date_expiration);
+                let renewalStatus = '';
+                let status = business.status;
+
+                if (expirationDate < currentDate) {
+                    renewalStatus = '<span class="badge badge-danger">Expired</span>';
+                    status = 'Expired';
+                } else {
+                    const timeDiff = expirationDate - currentDate;
+                    const daysRemaining = Math.ceil(timeDiff / (1000 * 3600 * 24));
+                    
+                    if (daysRemaining <= 30) {
+                        renewalStatus = `<span class="badge badge-warning">Renewal Needed (${daysRemaining} days left)</span>`;
+                        if (daysRemaining === 0) {
+                            status = 'Temporary Pending';
+                        }
+                    } else {
+                        renewalStatus = '<span class="badge badge-success">Valid</span>';
+                    }
+                }
+
+                displayHTML += `<tr>
+                    <td>${business.id}</td>
+                    <td><span class="business-name">${business.name}</span><input type="text" class="form-control" style="display:none;" value="${business.name}" /></td>
+                    <td><span class="business-address">${business.address}</span><input type="text" class="form-control" style="display:none;" value="${business.address}" /></td>
+                    <td><span class="business-type">${business.type}</span><input type="text" class="form-control" style="display:none;" value="${business.type}" /></td>
+                    <td>${business.date_approved}</td>
+                    <td>${business.date_expiration}</td>
+                    <td>${status}</td>
+                    <td>${renewalStatus}</td>
+                    <td>
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="actionMenu${business.id}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class='bx bx-dots-vertical-rounded'></i>
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="actionMenu${business.id}">
+                                <a class="dropdown-item" href="#" onclick="toggleEdit(${business.id}, this)">Edit</a>
+                                <a class="dropdown-item" href="#" onclick="saveUpdate(${business.id}, this)">Save</a>
+                                <a class="dropdown-item" href="view_business.php?id=${business.id}">View</a> <!-- View link -->
+                                <a class="dropdown-item" href="check_document_status.php?id=${business.id}">Check Document Status</a>
+                            </div>
+                        </div>
+                    </td>
+                </tr>`;
+            });
+
+            displayHTML += `</tbody></table>`;
+            $('#displayBusinessDataTable').html(displayHTML);
+        },
+        complete: function() {
+            setTimeout(displayBusinessData, 60000);
+        }
+    });
+}
+
+// Function to toggle edit fields
+function toggleEdit(id, element) {
+    const row = $(element).closest('tr');
+    row.find('span').toggle();
+    row.find('input').toggle();
+}
+
+// Function to save updates
+function saveUpdate(id, element) {
+    const row = $(element).closest('tr');
+    const updatedName = row.find('input').eq(0).val();
+    const updatedAddress = row.find('input').eq(1).val();
+    const updatedType = row.find('input').eq(2).val();
+
+    $.ajax({
+        url: 'update_business.php', // Change this URL to your actual update processing script
+        type: 'POST',
+        data: {
+            id: id,
+            name: updatedName,
+            address: updatedAddress,
+            type: updatedType
+        },
+        success: function(response) {
+            alert('Update successful!'); // Optionally handle success message
+            displayBusinessData(); // Refresh data after update
+        },
+        error: function() {
+            alert('Error updating data'); // Handle error
+        }
+    });
+}
+</script>
+
+</body>
+</html>
+
+
+
+/// code ko display data 
+<?php 
+include('../employee/assets/config/dbconn.php');
+
+// Get the filter status from the AJAX request
+$status = isset($_POST['status']) ? $_POST['status'] : 'all';
+
+// Modify the query based on the filter status
+$query = "SELECT email, business_name, business_address, business_type, period_date, date_application, document_status, id FROM registration";
+if ($status === 'pending') {
+    $query .= " WHERE document_status = 'Pending'";
+} elseif ($status === 'rejected') {
+    $query .= " WHERE document_status = 'Rejected'";
+}
+
+$result = mysqli_query($conn, $query);
+
+if (mysqli_num_rows($result) > 0) {
+    echo '<table class="table table-striped">';
+    echo '<thead>
+            <tr>
+                <th>Email</th>
+                <th>Business Name</th>
+                <th>Business Address</th>
+                <th>Business Type</th>
+                <th>Period Date</th>
+                <th>Date of Application</th>
+                <th>Document Status</th>
+                <th>Actions</th>
+            </tr>
+          </thead>';
+    echo '<tbody>';
+
+    while ($row = mysqli_fetch_assoc($result)) {
+        echo '<tr>
+                <td>' . $row['email'] . '</td>
+                <td>' . $row['business_name'] . '</td>
+                <td>' . $row['business_address'] . '</td>
+                <td>' . $row['business_type'] . '</td>
+                <td>' . $row['period_date'] . '</td>
+                <td>' . $row['date_application'] . '</td>
+                <td>' . $row['document_status'] . '</td>
+                <td>
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                            &#x2022;&#x2022;&#x2022;
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <li><a class="dropdown-item" href="#" onclick="viewDetails(' . $row['id'] . ')">View</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="getdetails(' . $row['id'] . ')">Update</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="deleteuser(' . $row['id'] . ')">Delete</a></li>
+                        </ul>
+                    </div>
+                </td>
+              </tr>';
+    }
+
+    echo '</tbody>';
+    echo '</table>';
+} else {
+    echo '<p>No records found.</p>';
+}
+
+mysqli_close($conn);
+?>
+
+
+
+
+/// working registration list 
