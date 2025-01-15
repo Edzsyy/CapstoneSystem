@@ -401,7 +401,7 @@ include('../admin/assets/inc/footer.php');
             }
         });
     }
-
+//send email modal
     function sendEmail(userId) {
     // Fetch user details via an AJAX POST request
     $.post("admin_registration_get_details.php", { updateid: userId }, function (data, status) {
