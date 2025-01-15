@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code Generator</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <h1>QR Code Generator</h1>
+
+    <form id="qrForm">
+        <label for="email">Enter your email:</label>
+        <input type="email" id="email" name="email" required>
+        <button type="submit">Generate QR Code</button>
+    </form>
+
+    <h3>Generated QR Code:</h3>
+    <img id="qrCodeImage" style="max-width: 300px; display:none;">
+
+    <script>
+        // Handle form submission
+        $('#qrForm').submit(function(event) {
+            event.preventDefault();
+
+            const email = $('#email').val();
+
+            // Send email to server to generate QR code
+            $.post('generate_qr.php', { email: email }, function(response) {
+                if (response.success) {
+                    $('#qrCodeImage').attr('src', response.qr_code_base64).show();
+                    alert('QR Code generated and sent to your email!');
+                } else {
+                    alert('Error: ' + response.message);
+                }
+            }, 'json');
+        });
+    </script>
+</body>
+</html>

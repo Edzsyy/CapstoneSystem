@@ -1,4 +1,4 @@
-<?php 
+<?php
 include('../admin/assets/config/dbconn.php');
 
 include('../admin/assets/inc/header.php');
@@ -7,11 +7,11 @@ include('../admin/assets/inc/sidebar.php');
 
 include('../admin/assets/inc/navbar.php');
 
-?> 
+?>
 
 
 
-<!-- QR code Modal -->
+<!-- QR code Scanner Modal -->
 <div class="modal fade" id="qrcodeModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -22,10 +22,26 @@ include('../admin/assets/inc/navbar.php');
             <div class="modal-body">
                 <script src="../admin/assets/js/html5-qrcode.min.js"></script>
                 <style>
-                    .result { background-color: green; color: #fff; padding: 20px; }
-                    .row { display: flex; }
-                    table { width: 100%; border-collapse: collapse; }
-                    th, td { padding: 10px; border: 1px solid #ddd; }
+                    .result {
+                        background-color: green;
+                        color: #fff;
+                        padding: 20px;
+                    }
+
+                    .row {
+                        display: flex;
+                    }
+
+                    table {
+                        width: 100%;
+                        border-collapse: collapse;
+                    }
+
+                    th,
+                    td {
+                        padding: 10px;
+                        border: 1px solid #ddd;
+                    }
                 </style>
                 <div class="row">
                     <div class="col">
@@ -46,19 +62,26 @@ include('../admin/assets/inc/navbar.php');
                             document.getElementById('result').innerHTML = '<span class="result">QR code does not contain a valid application ID</span>';
                         }
                     }
+
                     function onScanError(errorMessage) {
                         console.error('Scan error:', errorMessage);
                     }
+
                     function fetchDataFromServer(application_id) {
                         fetch('fetch_data.php', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                            body: new URLSearchParams({ 'application_id': application_id })
-                        })
-                        .then(response => response.json())
-                        .then(data => renderDataInTable(data))
-                        .catch(error => console.error('Error:', error));
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/x-www-form-urlencoded'
+                                },
+                                body: new URLSearchParams({
+                                    'application_id': application_id
+                                })
+                            })
+                            .then(response => response.json())
+                            .then(data => renderDataInTable(data))
+                            .catch(error => console.error('Error:', error));
                     }
+
                     function renderDataInTable(data) {
                         if (!data || data.length === 0) {
                             document.getElementById('result').innerHTML = '<span class="result">No data found</span>';
@@ -78,7 +101,10 @@ include('../admin/assets/inc/navbar.php');
                         table += '</table>';
                         document.getElementById('result').innerHTML = table;
                     }
-                    var html5QrcodeScanner = new Html5QrcodeScanner("reader", { fps: 10, qrbox: 250 });
+                    var html5QrcodeScanner = new Html5QrcodeScanner("reader", {
+                        fps: 10,
+                        qrbox: 250
+                    });
                     html5QrcodeScanner.render(onScanSuccess, onScanError);
                 </script>
             </div>
@@ -209,48 +235,48 @@ include('../admin/assets/inc/navbar.php');
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="text-center">
-                                <h5>Store Picture</h5>
-                                <img id="viewStorePicture" src="default_store_picture.jpg" alt="Store Picture" class="img-fluid rounded">
-                            </div>
-                            <div class="text-center">
-                                <h5>Food Security Clearance</h5>
-                                <img id="viewFoodSecurityClearance" src="default_food_security.jpg" alt="Food Security Clearance" class="img-fluid rounded">
-                            </div>
-                            <div class="text-center">
-                                <h5>DTI Document</h5>
-                                <img id="viewUploadDti" src="default_dti.jpg" alt="DTI Document" class="img-fluid rounded">
-                            </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="text-center">
+                            <h5>Store Picture</h5>
+                            <img id="viewStorePicture" src="default_store_picture.jpg" alt="Store Picture" class="img-fluid rounded">
                         </div>
-                        <div class="col-md-6">
-                            <p><strong>First Name:</strong> <span id="viewFirstname"></span></p>
-                            <p><strong>Middle Name:</strong> <span id="viewMiddlename"></span></p>
-                            <p><strong>Last Name:</strong> <span id="viewLastname"></span></p>
-                            <p><strong>Email:</strong> <span id="viewEmail"></span></p>
-                            <p><strong>Phone:</strong> <span id="viewPhone"></span></p>
-                            <p><strong>Address:</strong> <span id="viewAddress"></span></p>
-                            <p><strong>Zip Code:</strong> <span id="viewZip"></span></p>
-                            <p><strong>Business Name:</strong> <span id="viewBusinessName"></span></p>
-                            <p><strong>Business Address:</strong> <span id="viewBusinessAddress"></span></p>
-                            <p><strong>Building Name:</strong> <span id="viewBuildingName"></span></p>
-                            <p><strong>Building No:</strong> <span id="viewBuildingNo"></span></p>
-                            <p><strong>Street:</strong> <span id="viewStreet"></span></p>
-                            <p><strong>Barangay:</strong> <span id="viewBarangay"></span></p>
-                            <p><strong>Business Type:</strong> <span id="viewBusinessType"></span></p>
-                            <p><strong>Rent per Month:</strong> <span id="viewRentPerMonth"></span></p>
-                            <p><strong>Period Date:</strong> <span id="viewPeriodDate"></span></p>
-                            <p><strong>Date of Application:</strong> <span id="viewDateofApplication"></span></p>
-                            <p><strong>Receipt:</strong> <span id="viewReceipt"></span></p>
-                            <p><strong>OR Date:</strong> <span id="viewOrDate"></span></p>
-                            <p><strong>Amount Paid:</strong> <span id="viewAmountPaid"></span></p>
-                            <p><strong>Status:</strong> <span id="viewDocumentStatus"></span></p> <!-- Added Status -->
+                        <div class="text-center">
+                            <h5>Food Security Clearance</h5>
+                            <img id="viewFoodSecurityClearance" src="default_food_security.jpg" alt="Food Security Clearance" class="img-fluid rounded">
+                        </div>
+                        <div class="text-center">
+                            <h5>DTI Document</h5>
+                            <img id="viewUploadDti" src="default_dti.jpg" alt="DTI Document" class="img-fluid rounded">
                         </div>
                     </div>
+                    <div class="col-md-6">
+                        <p><strong>First Name:</strong> <span id="viewFirstname"></span></p>
+                        <p><strong>Middle Name:</strong> <span id="viewMiddlename"></span></p>
+                        <p><strong>Last Name:</strong> <span id="viewLastname"></span></p>
+                        <p><strong>Email:</strong> <span id="viewEmail"></span></p>
+                        <p><strong>Phone:</strong> <span id="viewPhone"></span></p>
+                        <p><strong>Address:</strong> <span id="viewAddress"></span></p>
+                        <p><strong>Zip Code:</strong> <span id="viewZip"></span></p>
+                        <p><strong>Business Name:</strong> <span id="viewBusinessName"></span></p>
+                        <p><strong>Business Address:</strong> <span id="viewBusinessAddress"></span></p>
+                        <p><strong>Building Name:</strong> <span id="viewBuildingName"></span></p>
+                        <p><strong>Building No:</strong> <span id="viewBuildingNo"></span></p>
+                        <p><strong>Street:</strong> <span id="viewStreet"></span></p>
+                        <p><strong>Barangay:</strong> <span id="viewBarangay"></span></p>
+                        <p><strong>Business Type:</strong> <span id="viewBusinessType"></span></p>
+                        <p><strong>Rent per Month:</strong> <span id="viewRentPerMonth"></span></p>
+                        <p><strong>Period Date:</strong> <span id="viewPeriodDate"></span></p>
+                        <p><strong>Date of Application:</strong> <span id="viewDateofApplication"></span></p>
+                        <p><strong>Receipt:</strong> <span id="viewReceipt"></span></p>
+                        <p><strong>OR Date:</strong> <span id="viewOrDate"></span></p>
+                        <p><strong>Amount Paid:</strong> <span id="viewAmountPaid"></span></p>
+                        <p><strong>Status:</strong> <span id="viewDocumentStatus"></span></p> <!-- Added Status -->
+                    </div>
                 </div>
-                <input type="hidden" id="hiddendata" value="">
-                <div class="modal-footer">
+            </div>
+            <input type="hidden" id="hiddendata" value="">
+            <div class="modal-footer">
                 <button type="button" class="btn btn-success" onclick="updateDocumentStatus('Approved')">Approve</button>
                 <button type="button" class="btn btn-danger" onclick="updateDocumentStatus('Rejected')">Reject</button>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -351,14 +377,14 @@ include('../admin/assets/inc/navbar.php');
                     <div class="col-md-6">
                         <label for="releaseEmail" class="form-label"><strong>Recipient Email</strong></label>
                         <input type="email" id="releaseEmail" class="form-control" placeholder="Enter recipient email" required>
-                        
+
                         <label for="releaseMessage" class="form-label mt-3"><strong>Custom Message</strong></label>
                         <textarea id="releaseMessage" class="form-control" rows="4" placeholder="Enter a custom message (optional)"></textarea>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" id="generateQRCodeBtn">Generate QR Code</button>
+                <button type="submit" class="btn btn-primary" id="generateQRCodeBtn">Generate QR Code</button>
                 <button type="button" class="btn btn-success" id="sendEmailBtn">Send Email</button>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
@@ -372,13 +398,13 @@ include('../admin/assets/inc/navbar.php');
 
 
 
-<?php 
+<?php
 include('../admin/assets/inc/footer.php');
-?> 
+?>
 
 
 <script>
-        $(document).ready(function() {
+    $(document).ready(function() {
         filterData('All'); // Load all data by default
     });
 
@@ -387,7 +413,9 @@ include('../admin/assets/inc/footer.php');
         $.ajax({
             url: "admin_registration_list_displaydata.php",
             type: 'post',
-            data: { displaysend: status },
+            data: {
+                displaysend: status
+            },
             success: function(data) {
                 if (status === 'All') {
                     $('#displayDataTableAll').html(data);
@@ -401,44 +429,52 @@ include('../admin/assets/inc/footer.php');
             }
         });
     }
-//send email modal
+    //send email modal
     function sendEmail(userId) {
-    // Fetch user details via an AJAX POST request
-    $.post("admin_registration_get_details.php", { updateid: userId }, function (data, status) {
-        // Parse the returned JSON data
-        var user = JSON.parse(data);
+        // Fetch user details via an AJAX POST request
+        $.post("admin_registration_get_details.php", {
+            updateid: userId
+        }, function(data, status) {
+            // Parse the returned JSON data
+            var user = JSON.parse(data);
 
-        // Populate the fields in the Send Email Modal
-        $('#permitBusinessName').text(user.business_name);
-        $('#permitOwnerName').text(user.fname + ' ' + user.mname + ' ' + user.lname);
-        $('#permitType').text(user.business_type);
-        $('#permitExpiration').text(user.period_date);
+            // Populate the fields in the Send Email Modal
+            $('#permitBusinessName').text(user.business_name);
+            $('#permitOwnerName').text(user.fname + ' ' + user.mname + ' ' + user.lname);
+            $('#permitType').text(user.business_type);
+            $('#permitExpiration').text(user.period_date);
 
-        // Auto-fill the recipient email
-        $('#releaseEmail').val(user.email);
+            // Auto-fill the recipient email
+            $('#releaseEmail').val(user.email);
 
-        // Ensure only one click event is bound to the Generate QR Code button
-        $('#generateQRCodeBtn').off('click').on('click', function () {
-            // Send an AJAX request to the backend
-    $.post('send_qr_email.php', { email: user.email }, function (response) {
-        if (response.success) {
-            // Display the QR Code using the Base64 URI
-            $('#permitQRCode')
-                .attr('src', response.qr_code_base64)
-                .removeClass('d-none'); // Show the image
-            alert('QR Code generated successfully!');
-        } else {
-            alert('Failed to generate QR Code: ' + response.message);
-        }
-    }, 'json').fail(function () {
-        alert('An error occurred while generating the QR Code.');
-    });
-});
+            $(document).ready(function() {
+                // When modal is closed, hide the QR code image
+                $('#sendEmailModal').on('hidden.bs.modal', function() {
+                    $('#permitQRCode').addClass('d-none'); // Hide QR code image
+                    $('#permitQRCode').attr('src', ''); // Reset the image source
+                });
 
-        // Show the Send Email Modal
-        $('#sendEmailModal').modal("show");
-    });
-}
+                // Handle form submission to generate the QR code
+                $('#generateQRCodeBtn').click(function() {
+                    const email = $('#releaseEmail').val();
+
+                    // Send the email to generate QR code
+                    $.post('send_qr_email.php', {
+                        email: email
+                    }, function(response) {
+                        if (response.success) {
+                            $('#permitQRCode').attr('src', response.qr_code_base64).removeClass('d-none'); // Show the QR code
+                        } else {
+                            alert('Error: ' + response.message);
+                        }
+                    }, 'json');
+                });
+            });
+
+            // Show the Send Email Modal
+            $('#sendEmailModal').modal("show");
+        });
+    }
 
 
 
@@ -447,42 +483,45 @@ include('../admin/assets/inc/footer.php');
 
 
     //delete function
-    function deleteuser(deleteid)
-    {
+    function deleteuser(deleteid) {
         $.ajax({
-            url:"admin_registration_list_delete.php",
-            type:'post',
-            data:{
-                deletesend:deleteid
+            url: "admin_registration_list_delete.php",
+            type: 'post',
+            data: {
+                deletesend: deleteid
             },
-            success:function(data,status){
+            success: function(data, status) {
                 //console.log(status);
                 displayData();
             }
         });
     }
 
- 
-    $(document).ready(function() {
-    displayData();
-});
 
-// Function to display user data
-function displayData() {
-    var displayData = "true";
-    $.ajax({
-        url: "admin_registration_list_displaydata.php",
-        type: 'post',
-        data: { displaysend: displayData },
-        success: function(data, status) {
-            $('#displayDataTable').html(data);
-        }
+    $(document).ready(function() {
+        displayData();
     });
-}
+
+    // Function to display user data
+    function displayData() {
+        var displayData = "true";
+        $.ajax({
+            url: "admin_registration_list_displaydata.php",
+            type: 'post',
+            data: {
+                displaysend: displayData
+            },
+            success: function(data, status) {
+                $('#displayDataTable').html(data);
+            }
+        });
+    }
 
     // Function to get user details and populate the update modal
     function getdetails(updateid) {
-        $.post("admin_registration_get_details.php", { updateid: updateid }, function(data, status) {
+        $.post("admin_registration_get_details.php", {
+            updateid: updateid
+        }, function(data, status) {
             var user = JSON.parse(data);
             $('#updateId').val(user.id);
             $('#updateFirstname').val(user.fname);
@@ -551,10 +590,12 @@ function displayData() {
     }
 
 
-    
-// view function for displaying user details including image files
-function viewDetails(viewid) {
-        $.post("admin_registration_list_view.php", { viewid: viewid }, function(data, status) {
+
+    // view function for displaying user details including image files
+    function viewDetails(viewid) {
+        $.post("admin_registration_list_view.php", {
+            viewid: viewid
+        }, function(data, status) {
             var user = JSON.parse(data);
 
             if (user.error) {
@@ -564,7 +605,7 @@ function viewDetails(viewid) {
 
 
             // Set the hidden input value to the viewId
-             $('#hiddendata').val(viewid)
+            $('#hiddendata').val(viewid)
 
             // Populate the modal fields with the fetched data
             $('#viewFirstname').text(user.fname);
@@ -622,68 +663,63 @@ function viewDetails(viewid) {
 
     // Function to update the document status
     function updateDocumentStatus(status) {
-            var viewId = $('#hiddendata').val(); // Make sure this input exists and has a value
+        var viewId = $('#hiddendata').val(); // Make sure this input exists and has a value
 
-            // Debugging logs
-            console.log("View ID:", viewId);
-            console.log("Document Status:", status);
+        // Debugging logs
+        console.log("View ID:", viewId);
+        console.log("Document Status:", status);
 
-            // Check if the viewId and status are not empty
-            if (!viewId || !status) {
-                alert("View ID or Document Status is missing.");
-                return;
-            }
+        // Check if the viewId and status are not empty
+        if (!viewId || !status) {
+            alert("View ID or Document Status is missing.");
+            return;
+        }
 
-            $.post("admin_registration_list_update_status.php", 
-            {
-                viewid: viewId,
-                document_status: status
-            }, 
-            //approve button
-            function(data) {
-    console.log("Response:", data);
-    if (data.success) {
-        $('#viewDocumentStatus').text(status);
-        alert("Document status updated to " + status + " and QR code has been sent to the user's email.");
-        $('#viewModal').modal('hide');
-        displayData(); // Refresh the list
-
-        // Additional action for sending email if status is 'Approved'
-        if (status === 'Approved') {
-            $.ajax({
-                url: 'send_qr_email.php', // PHP script for QR generation and email
-                type: 'POST',
-                data: {
-                    email: data.email, // Applicant's email from the backend response
+        $.post("admin_registration_list_update_status.php", {
+                    viewid: viewId,
+                    document_status: status
                 },
-                success: function(response) {
-                    console.log("QR Code email sent successfully:", response);
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    console.error("Failed to send QR Code email:", textStatus, errorThrown);
-                }
+                //approve button
+                function(data) {
+                    console.log("Response:", data);
+                    if (data.success) {
+                        $('#viewDocumentStatus').text(status);
+                        alert("Document status updated to " + status + " and QR code has been sent to the user's email.");
+                        $('#viewModal').modal('hide');
+                        displayData(); // Refresh the list
+
+                        // Additional action for sending email if status is 'Approved'
+                        if (status === 'Approved') {
+                            $.ajax({
+                                url: 'send_qr_email.php', // PHP script for QR generation and email
+                                type: 'POST',
+                                data: {
+                                    email: data.email, // Applicant's email from the backend response
+                                },
+                                success: function(response) {
+                                    console.log("QR Code email sent successfully:", response);
+                                },
+                                error: function(jqXHR, textStatus, errorThrown) {
+                                    console.error("Failed to send QR Code email:", textStatus, errorThrown);
+                                }
+                            });
+                        }
+
+                        if (status === 'Rejected') {
+                            alert("Your document was rejected. Please refill the renewal update form.");
+                            window.location.href = "./admin_registration_list.php";
+                        }
+                    } else {
+                        alert("Failed to update the document status: " + data.error);
+                    }
+                }, "json")
+            .fail(function(jqXHR, textStatus, errorThrown) {
+                console.error("AJAX request failed: " + textStatus + ", " + errorThrown);
+                alert("AJAX request failed: " + textStatus);
             });
-        }
 
-        if (status === 'Rejected') {
-            alert("Your document was rejected. Please refill the renewal update form.");
-            window.location.href = "./admin_registration_list.php";
-        }
-    } else {
-        alert("Failed to update the document status: " + data.error);
     }
-}, "json")
-.fail(function(jqXHR, textStatus, errorThrown) {
-    console.error("AJAX request failed: " + textStatus + ", " + errorThrown);
-    alert("AJAX request failed: " + textStatus);
-});
-
-        }
-
-    
-
 </script>
 
 
 </body>
-</html>
