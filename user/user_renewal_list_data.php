@@ -17,23 +17,23 @@ include('../user/assets/config/dbconn.php');
 // Initialize error and success message variables
 $errorMessage = '';
 $successMessage = '';
-$receiptNumber = ''; // Initialize receipt number to avoid undefined variable warning
+$applicationNumber = ''; // Initialize application number to avoid undefined variable warning
 
-// Function to generate a unique receipt number
-function generateReceiptNumber($conn) {
-    $prefix = "REC-";
+// Function to generate a unique application number
+function generateApplicationNumber($conn) {
+    $prefix = "APP-";
     $date = date("Ymd");
 
-    // Query to get the last inserted receipt number for today
-    $query = "SELECT reciept FROM renewal WHERE reciept LIKE '$prefix$date%' ORDER BY id DESC LIMIT 1";
+    // Query to get the last inserted application number for today
+    $query = "SELECT application_number FROM renewal WHERE application_number LIKE '$prefix$date%' ORDER BY id DESC LIMIT 1";
     $result = $conn->query($query);
 
     if ($result && $result->num_rows > 0) {
         $row = $result->fetch_assoc();
-        $lastNumber = (int)substr($row['reciept'], -4);
+        $lastNumber = (int)substr($row['application_number'], -4);
         $newNumber = str_pad($lastNumber + 1, 4, "0", STR_PAD_LEFT);
     } else {
-        $newNumber = "0001"; // Start with 0001 if no receipt exists
+        $newNumber = "0001"; // Start with 0001 if no application number exists
     }
 
     return $prefix . $date . $newNumber;
@@ -41,8 +41,8 @@ function generateReceiptNumber($conn) {
 
 // Check if the form is submitted
 if (isset($_REQUEST['submit'])) {
-    // Auto-generate the receipt number
-    $receiptNumber = generateReceiptNumber($conn);
+    // Auto-generate the application number
+    $applicationNumber = generateApplicationNumber($conn);
 
     // Escape user inputs for security
     $formData = [
@@ -61,10 +61,7 @@ if (isset($_REQUEST['submit'])) {
         'barangay' => mysqli_real_escape_string($conn, $_POST['barangay']),
         'business_type' => mysqli_real_escape_string($conn, $_POST['business_type']),
         'rent_per_month' => mysqli_real_escape_string($conn, $_POST['rent_per_month']),
-        'period_date' => !empty($_POST['period_date']) ? mysqli_real_escape_string($conn, $_POST['period_date']) : NULL,
         'date_application' => mysqli_real_escape_string($conn, $_POST['date_application']),
-        'or_date' => mysqli_real_escape_string($conn, $_POST['or_date']),
-        'amount_paid' => !empty($_POST['amount_paid']) ? mysqli_real_escape_string($conn, $_POST['amount_paid']) : NULL,
     ];
 
     // Handle file uploads with validation
@@ -100,10 +97,10 @@ if (isset($_REQUEST['submit'])) {
     // Proceed with database insertion if no error occurred
     if (empty($errorMessage)) {
         $sql = "INSERT INTO renewal (fname, mname, lname, address, zip, business_name, phone, email, business_address, 
-                building_name, building_no, street, barangay, business_type, rent_per_month, period_date, 
-                date_application, reciept, or_date, amount_paid, upload_dti, upload_store_picture, 
+                building_name, building_no, street, barangay, business_type, rent_per_month, 
+                date_application, application_number, upload_dti, upload_store_picture, 
                 food_security_clearance, upload_old_permit) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         $stmt = $conn->prepare($sql);
         if ($stmt === false) {
@@ -116,13 +113,12 @@ if (isset($_REQUEST['submit'])) {
             $upload_old_permit = $uploadedFiles['upload_old_permit'] ?? NULL;
 
             // Bind parameters
-            $stmt->bind_param("ssssssssssssssssssssssss", 
+            $stmt->bind_param("sssssssssssssssssssss", 
                 $formData['fname'], $formData['mname'], $formData['lname'], $formData['address'], $formData['zip'], 
                 $formData['business_name'], $formData['phone'], $formData['email'], $formData['business_address'], 
                 $formData['building_name'], $formData['building_no'], $formData['street'], $formData['barangay'], 
-                $formData['business_type'], $formData['rent_per_month'], $formData['period_date'], 
-                $formData['date_application'], $receiptNumber, $formData['or_date'], 
-                $formData['amount_paid'], $upload_dti, $upload_store_picture, 
+                $formData['business_type'], $formData['rent_per_month'], 
+                $formData['date_application'], $applicationNumber, $upload_dti, $upload_store_picture, 
                 $food_security_clearance, $upload_old_permit);
 
             if ($stmt->execute()) {

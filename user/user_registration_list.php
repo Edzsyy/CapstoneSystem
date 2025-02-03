@@ -235,11 +235,8 @@ include('../user/assets/inc/navbar.php');
                             <p><strong>Barangay:</strong> <span id="viewBarangay"></span></p>
                             <p><strong>Business Type:</strong> <span id="viewBusinessType"></span></p>
                             <p><strong>Rent per Month:</strong> <span id="viewRentPerMonth"></span></p>
-                            <p><strong>Period Date:</strong> <span id="viewPeriodDate"></span></p>
                             <p><strong>Date of Application:</strong> <span id="viewDateofApplication"></span></p>
-                            <p><strong>Receipt:</strong> <span id="viewReceipt"></span></p>
-                            <p><strong>OR Date:</strong> <span id="viewOrDate"></span></p>
-                            <p><strong>Amount Paid:</strong> <span id="viewAmountPaid"></span></p>
+                            <p><strong>application_number:</strong> <span id="viewapplication_number"></span></p>
                             <p><strong>Status:</strong> <span id="viewDocumentStatus"></span></p> <!-- Added Status -->
                         </div>
                     </div>
@@ -345,7 +342,6 @@ include('../user/assets/inc/footer.php');
             $('#updateBusinessName').val(userid.business_name);
             $('#updateCommercialAddress').val(userid.business_address);
             $('#updateDateofApplication').val(userid.date_application);
-            $('#updatePeriodofDate').val(userid.period_date);
         });
 
         $('#updateModal').modal("show");
@@ -369,8 +365,7 @@ include('../user/assets/inc/footer.php');
             $('#updateBusinessType').val(userid.business_type); // Added Business Type
             $('#updateDateofApplication').val(userid.date_application);
             $('#updateDateApproved').val(userid.date_approved); // Added Date Approved
-            $('#updateDateExpiration').val(userid.date_expiration); // Added Date Expiration
-            $('#updatePeriodofDate').val(userid.period_date);
+            $('#updateExperationDate').val(userid.expiration_date); // Added Date Expiration
         });
 
         $('#updateModal').modal("show");
@@ -390,7 +385,6 @@ include('../user/assets/inc/footer.php');
         var updateDateofApplication = $('#updateDateofApplication').val();
         var updateDateApproved = $('#updateDateApproved').val(); // New
         var updateDateExpiration = $('#updateDateExpiration').val(); // New
-        var updatePeriodofDate = $('#updatePeriodofDate').val();
         var hiddendata = $('#hiddendata').val();
 
         $.post("user_registration_list_update.php", {
@@ -406,7 +400,6 @@ include('../user/assets/inc/footer.php');
             updateDateofApplication: updateDateofApplication,
             updateDateApproved: updateDateApproved, // New
             updateDateExpiration: updateDateExpiration, // New
-            updatePeriodofDate: updatePeriodofDate,
             hiddendata: hiddendata
         }, function(data, status) {
             $('#updateModal').modal('hide');
@@ -443,11 +436,8 @@ include('../user/assets/inc/footer.php');
             $('#viewBarangay').text(user.barangay);
             $('#viewBusinessType').text(user.business_type);
             $('#viewRentPerMonth').text(user.rent_per_month);
-            $('#viewPeriodDate').text(user.period_date); // Make sure this field is present in the modal
             $('#viewDateofApplication').text(user.date_application);
-            $('#viewReceipt').text(user.receipt); // Corrected spelling from 'reciept' to 'receipt'
-            $('#viewOrDate').text(user.or_date);
-            $('#viewAmountPaid').text(user.amount_paid);
+            $('#viewapplication_number').text(user.application_number);
             $('#viewDocumentStatus').text(user.document_status);
 
             // Handle image files

@@ -21,7 +21,7 @@ if (isset($_POST['updateid'])) {
     $rent_per_month = $_POST['rent_per_month'];
     $period_date = $_POST['period_date'];
     $date_application = $_POST['date_application'];
-    $reciept = $_POST['reciept'];
+    $application_number = $_POST['application_number'];
     $or_date = $_POST['or_date'];
     $amount_paid = $_POST['amount_paid'];
     $picture = $_POST['picture'];
@@ -32,7 +32,7 @@ if (isset($_POST['updateid'])) {
         business_name = ?, phone = ?, email = ?, com_address = ?, 
         building_name = ?, building_no = ?, street = ?, barangay = ?, 
         product = ?, registered_name = ?, rent_per_month = ?, 
-        period_date = ?, date_application = ?, reciept = ?, 
+        period_date = ?, date_application = ?, application_number = ?, 
         or_date = ?, amount_paid = ?, picture = ? 
         WHERE id = ?");
 
@@ -42,7 +42,7 @@ if (isset($_POST['updateid'])) {
         $business_name, $phone, $email, $com_address, 
         $building_name, $building_no, $street, $barangay, 
         $product, $registered_name, $rent_per_month, 
-        $period_date, $date_application, $reciept, 
+        $period_date, $date_application, $application_number, 
         $or_date, $amount_paid, $picture, $updateId
     );
 

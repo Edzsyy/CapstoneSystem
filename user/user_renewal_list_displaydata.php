@@ -2,7 +2,7 @@
 include('../user/assets/config/dbconn.php');
 
 // Fetch data for the first table
-$query = "SELECT email, business_name, business_address, business_type, period_date, date_application, id FROM renewal"; 
+$query = "SELECT email, business_name, business_address, business_type, application_status, document_status, date_application, id FROM renewal"; 
 $result = mysqli_query($conn, $query);
 
 if (mysqli_num_rows($result) > 0) {
@@ -13,9 +13,11 @@ if (mysqli_num_rows($result) > 0) {
                 <th>Business Name</th>
                 <th>Business Address</th>
                 <th>Business Type</th>
-                <th>Period Date</th>
                 <th>Date of Application</th>
+                <th>Ducment status</th>
+                <th>Application status</th> 
                 <th>Actions</th>
+                Ducment status
             </tr>
           </thead>';
     echo '<tbody>';
@@ -26,8 +28,9 @@ if (mysqli_num_rows($result) > 0) {
                 <td>' . $row['business_name'] . '</td>
                 <td>' . $row['business_address'] . '</td>
                 <td>' . $row['business_type'] . '</td>
-                <td>' . $row['period_date'] . '</td>
                 <td>' . $row['date_application'] . '</td>
+                <td>' . $row['application_status'] . '</td>
+                <td>' . $row['document_status'] . '</td>
                 <td>
                     <div class="dropdown">
                         <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">

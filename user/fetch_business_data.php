@@ -8,15 +8,15 @@ $query = "
         email, 
         business_name, 
         business_address, 
-        business_type, 
-        period_date, 
+        business_type,
+        application_number,  
         date_application, 
-        permit_expiration, 
+        expiration_date, 
         document_status,
         CASE
-            WHEN permit_expiration IS NULL OR permit_expiration = '0000-00-00' THEN 'N/A'
-            WHEN permit_expiration < CURDATE() THEN 'Expired'
-            WHEN permit_expiration BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 30 DAY) THEN 'Needs Renewal'
+            WHEN expiration_date IS NULL OR expiration_date = '0000-00-00' THEN 'N/A'
+            WHEN expiration_date < CURDATE() THEN 'Expired'
+            WHEN expiration_date BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 30 DAY) THEN 'Needs Renewal'
             ELSE 'Active'
         END AS display_status
     FROM registration
@@ -26,15 +26,15 @@ $query = "
         email, 
         business_name, 
         business_address, 
-        business_type, 
-        period_date, 
+        business_type,
+        application_number,   
         date_application, 
-        permit_expiration, 
+        expiration_date, 
         document_status,
         CASE
-            WHEN permit_expiration IS NULL OR permit_expiration = '0000-00-00' THEN 'N/A'
-            WHEN permit_expiration < CURDATE() THEN 'Expired'
-            WHEN permit_expiration BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 30 DAY) THEN 'Needs Renewal'
+            WHEN expiration_date IS NULL OR expiration_date = '0000-00-00' THEN 'N/A'
+            WHEN expiration_date < CURDATE() THEN 'Expired'
+            WHEN expiration_date BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 30 DAY) THEN 'Needs Renewal'
             ELSE 'Active'
         END AS display_status
     FROM renewal

@@ -85,7 +85,7 @@ include('../user/assets/inc/navbar.php');
 </div>
 <!-- End QR code Modal -->
 
-<!---update registration-->
+<!---update renewal-->
 <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -152,24 +152,12 @@ include('../user/assets/inc/navbar.php');
                     <input type="text" class="form-control" id="updateRentPerMonth" placeholder="Rent Per Month">
                 </div>
                 <div class="mb-3">
-                    <label for="updatePeriodofDate" class="form-label">Period of Date:</label>
-                    <input type="text" class="form-control" id="updatePeriodofDate" placeholder="Period of Date">
-                </div>
-                <div class="mb-3">
                     <label for="updateDateofApplication" class="form-label">Date of Application:</label>
                     <input type="date" class="form-control" id="updateDateofApplication" placeholder="Date of Application">
                 </div>
                 <div class="mb-3">
-                    <label for="updateReceipt" class="form-label">Receipt:</label>
-                    <input type="text" class="form-control" id="updateReceipt" placeholder="Receipt">
-                </div>
-                <div class="mb-3">
-                    <label for="updateOrDate" class="form-label">OR Date:</label>
-                    <input type="date" class="form-control" id="updateOrDate" placeholder="OR Date">
-                </div>
-                <div class="mb-3">
-                    <label for="updateAmountPaid" class="form-label">Amount Paid:</label>
-                    <input type="text" class="form-control" id="updateAmountPaid" placeholder="Amount Paid">
+                    <label for="updateapplication_number" class="form-label">application_number:</label>
+                    <input type="text" class="form-control" id="updateapplication_number" placeholder="application_number">
                 </div>
                 <div class="mb-3">
                     <label for="updateUploadDti" class="form-label">Upload DTI:</label>
@@ -197,10 +185,10 @@ include('../user/assets/inc/navbar.php');
         </div>
     </div>
 </div>
-<!---end update registration-->
+<!---end update renewal-->
 
 
-<!-- View Registration Modal -->
+<!-- View Renewal Modal -->
 <div class="modal fade" id="viewModal" tabindex="-1" aria-labelledby="viewModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -249,11 +237,8 @@ include('../user/assets/inc/navbar.php');
                             <p><strong>Barangay:</strong> <span id="viewBarangay"></span></p>
                             <p><strong>Business Type:</strong> <span id="viewBusinessType"></span></p>
                             <p><strong>Rent per Month:</strong> <span id="viewRentPerMonth"></span></p>
-                            <p><strong>Period Date:</strong> <span id="viewPeriodDate"></span></p>
                             <p><strong>Date of Application:</strong> <span id="viewDateofApplication"></span></p>
-                            <p><strong>Receipt:</strong> <span id="viewReceipt"></span></p>
-                            <p><strong>OR Date:</strong> <span id="viewOrDate"></span></p>
-                            <p><strong>Amount Paid:</strong> <span id="viewAmountPaid"></span></p>
+                            <p><strong>application_number:</strong> <span id="viewapplication_number"></span></p>
                             <p><strong>Status:</strong> <span id="viewDocumentStatus"></span></p> <!-- Added Status -->
                         </div>
                     </div>
@@ -265,7 +250,7 @@ include('../user/assets/inc/navbar.php');
         </div>
     </div>
 </div>
-<!-- View Registration Modal end  -->
+<!-- View Renewal Modal end  -->
 
 <!-- Image View Modal -->
 <div class="modal fade" id="imageViewModal" tabindex="-1" aria-labelledby="imageViewModalLabel" aria-hidden="true">
@@ -384,7 +369,6 @@ include('../user/assets/inc/footer.php');
             $('#updateDateofApplication').val(userid.date_application);
             $('#updateDateApproved').val(userid.date_approved); // Added Date Approved
             $('#updateDateExpiration').val(userid.date_expiration); // Added Date Expiration
-            $('#updatePeriodofDate').val(userid.period_date);
         });
 
         $('#updateModal').modal("show");
@@ -404,7 +388,6 @@ include('../user/assets/inc/footer.php');
         var updateDateofApplication = $('#updateDateofApplication').val();
         var updateDateApproved = $('#updateDateApproved').val(); // New
         var updateDateExpiration = $('#updateDateExpiration').val(); // New
-        var updatePeriodofDate = $('#updatePeriodofDate').val();
         var hiddendata = $('#hiddendata').val();
 
         $.post("user_renewal_list_update.php", {
@@ -420,7 +403,6 @@ include('../user/assets/inc/footer.php');
             updateDateofApplication: updateDateofApplication,
             updateDateApproved: updateDateApproved, // New
             updateDateExpiration: updateDateExpiration, // New
-            updatePeriodofDate: updatePeriodofDate,
             hiddendata: hiddendata
         }, function(data, status) {
             $('#updateModal').modal('hide');
@@ -457,11 +439,8 @@ include('../user/assets/inc/footer.php');
             $('#viewBarangay').text(user.barangay);
             $('#viewBusinessType').text(user.business_type);
             $('#viewRentPerMonth').text(user.rent_per_month);
-            $('#viewPeriodDate').text(user.period_date);
             $('#viewDateofApplication').text(user.date_application);
-            $('#viewReceipt').text(user.reciept);
-            $('#viewOrDate').text(user.or_date);
-            $('#viewAmountPaid').text(user.amount_paid);
+            $('#viewapplication_number').text(user.application_number);
             $('#viewDocumentStatus').text(user.document_status);
 
             // Handle image files

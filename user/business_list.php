@@ -72,10 +72,10 @@ function displayBusinessData(status) {
                         <th>Business Name</th>
                         <th>Business Address</th>
                         <th>Business Type</th>
-                        <th>Period of Date</th>
+                        <th>Application Number</th>
                         <th>Date of Application</th>
                         <th>Document Status</th>
-                        <th>Permit Expiration</th>
+                        <th>Expiration Date</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -87,10 +87,10 @@ function displayBusinessData(status) {
                     <td>${business.business_name}</td>
                     <td>${business.business_address}</td>
                     <td>${business.business_type}</td>
-                    <td>${business.period_date || 'N/A'}</td>
+                    <td>${business.application_number || 'N/A'}</td>
                     <td>${business.date_application}</td>
                     <td>${business.document_status || 'Pending'}</td>
-                    <td>${business.permit_expiration || 'N/A'}</td>
+                    <td>${business.expiration_date || 'N/A'}</td>
                     <td>
                         <div class="dropdown">
                             <button class="btn btn-secondary dropdown-toggle" type="button" id="actionMenu${business.id}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
