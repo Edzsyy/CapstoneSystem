@@ -130,7 +130,7 @@ ob_end_flush();
                 <div class="alert alert-success"><?= $successMessage; ?></div>
             <?php endif; ?>
 
-            <form class="row g-3" id="validated_form" method="post" action="employee_registration.php" enctype="multipart/form-data">
+            <form class="row g-3" id="validated_form" method="post" action="user_registration.php" enctype="multipart/form-data">
                 <div class="top-form" style="text-align: center;">
                     <h6>Republic of the Philippines</h6>
                     <h6>San Agustin, Metropolitan Manila</h6>
@@ -206,10 +206,6 @@ ob_end_flush();
                 <div class="col-md-4">
                     <label for="rent_per_month" class="form-label">Rent Per Month:</label>
                     <input type="text" class="form-control" id="rent_per_month" name="rent_per_month" placeholder="Rent Per Month" required>
-                </div>
-                <div class="col-md-4">
-                    <label for="period_date" class="form-label">Period Date (Optional):</label>
-                    <input type="date" class="form-control" id="period_date" name="period_date">
                 </div>
                 <hr>
                 <h5 style="text-align: center;">Upload Required Documents</h5>

@@ -183,26 +183,12 @@ include('../admin/assets/inc/navbar.php');
                     <label for="updateRentPerMonth" class="form-label">Rent Per Month</label>
                     <input type="text" class="form-control" id="updateRentPerMonth">
                 </div>
-                <div class="mb-3">
-                    <label for="updatePeriodofDate" class="form-label">Period of Date</label>
-                    <input type="text" class="form-control" id="updatePeriodofDate">
-                </div>
+               
                 <div class="mb-3">
                     <label for="updateDateofApplication" class="form-label">Date of Application</label>
                     <input type="date" class="form-control" id="updateDateofApplication">
                 </div>
-                <div class="mb-3">
-                    <label for="updateReceipt" class="form-label">Receipt</label>
-                    <input type="text" class="form-control" id="updateReceipt">
-                </div>
-                <div class="mb-3">
-                    <label for="updateOrDate" class="form-label">OR Date</label>
-                    <input type="date" class="form-control" id="updateOrDate">
-                </div>
-                <div class="mb-3">
-                    <label for="updateAmountPaid" class="form-label">Amount Paid</label>
-                    <input type="text" class="form-control" id="updateAmountPaid">
-                </div>
+                
                 <!-- File Upload Inputs -->
                 <div class="mb-3">
                     <label for="updateUploadDti" class="form-label">Upload DTI</label>
@@ -251,26 +237,23 @@ include('../admin/assets/inc/navbar.php');
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <p><strong>First Name:</strong> <span id="viewFirstname"></span></p>
-                        <p><strong>Middle Name:</strong> <span id="viewMiddlename"></span></p>
-                        <p><strong>Last Name:</strong> <span id="viewLastname"></span></p>
-                        <p><strong>Email:</strong> <span id="viewEmail"></span></p>
-                        <p><strong>Phone:</strong> <span id="viewPhone"></span></p>
-                        <p><strong>Address:</strong> <span id="viewAddress"></span></p>
-                        <p><strong>Zip Code:</strong> <span id="viewZip"></span></p>
-                        <p><strong>Business Name:</strong> <span id="viewBusinessName"></span></p>
-                        <p><strong>Business Address:</strong> <span id="viewBusinessAddress"></span></p>
-                        <p><strong>Building Name:</strong> <span id="viewBuildingName"></span></p>
-                        <p><strong>Building No:</strong> <span id="viewBuildingNo"></span></p>
-                        <p><strong>Street:</strong> <span id="viewStreet"></span></p>
-                        <p><strong>Barangay:</strong> <span id="viewBarangay"></span></p>
-                        <p><strong>Business Type:</strong> <span id="viewBusinessType"></span></p>
-                        <p><strong>Rent per Month:</strong> <span id="viewRentPerMonth"></span></p>
-                        <p><strong>Period Date:</strong> <span id="viewPeriodDate"></span></p>
-                        <p><strong>Date of Application:</strong> <span id="viewDateofApplication"></span></p>
-                        <p><strong>Receipt:</strong> <span id="viewReceipt"></span></p>
-                        <p><strong>OR Date:</strong> <span id="viewOrDate"></span></p>
-                        <p><strong>Amount Paid:</strong> <span id="viewAmountPaid"></span></p>
+                    <p><strong>First Name:</strong> <span id="viewFirstname"></span></p>
+                            <p><strong>Middle Name:</strong> <span id="viewMiddlename"></span></p>
+                            <p><strong>Last Name:</strong> <span id="viewLastname"></span></p>
+                            <p><strong>Email:</strong> <span id="viewEmail"></span></p>
+                            <p><strong>Phone:</strong> <span id="viewPhone"></span></p>
+                            <p><strong>Address:</strong> <span id="viewAddress"></span></p>
+                            <p><strong>Zip Code:</strong> <span id="viewZip"></span></p>
+                            <p><strong>Business Name:</strong> <span id="viewBusinessName"></span></p>
+                            <p><strong>Business Address:</strong> <span id="viewBusinessAddress"></span></p>
+                            <p><strong>Building Name:</strong> <span id="viewBuildingName"></span></p>
+                            <p><strong>Building No:</strong> <span id="viewBuildingNo"></span></p>
+                            <p><strong>Street:</strong> <span id="viewStreet"></span></p>
+                            <p><strong>Barangay:</strong> <span id="viewBarangay"></span></p>
+                            <p><strong>Business Type:</strong> <span id="viewBusinessType"></span></p>
+                            <p><strong>Rent per Month:</strong> <span id="viewRentPerMonth"></span></p>
+                            <p><strong>Date of Application:</strong> <span id="viewDateofApplication"></span></p>
+                            <p><strong>application_number:</strong> <span id="viewapplication_number"></span></p>
                         <p><strong>Status:</strong> <span id="viewDocumentStatus"></span></p> <!-- Added Status -->
                     </div>
                 </div>
@@ -328,9 +311,7 @@ include('../admin/assets/inc/navbar.php');
                 <li class="nav-item">
                     <a class="nav-link" data-bs-toggle="tab" href="#pending" onclick="filterData('Pending')">Pending</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" data-bs-toggle="tab" href="#rejected" onclick="filterData('Rejected')">Rejected</a>
-                </li>
+                
             </ul>
 
             <div class="tab-content">
@@ -343,9 +324,7 @@ include('../admin/assets/inc/navbar.php');
                 <div class="tab-pane fade" id="pending">
                     <div id="displayDataTablePending"></div>
                 </div>
-                <div class="tab-pane fade" id="rejected">
-                    <div id="displayDataTableRejected"></div>
-                </div>
+                
             </div>
         </div>
     </div>
@@ -623,11 +602,8 @@ include('../admin/assets/inc/footer.php');
             $('#viewBarangay').text(user.barangay);
             $('#viewBusinessType').text(user.business_type);
             $('#viewRentPerMonth').text(user.rent_per_month);
-            $('#viewPeriodDate').text(user.period_date);
             $('#viewDateofApplication').text(user.date_application);
-            $('#viewReceipt').text(user.reciept);
-            $('#viewOrDate').text(user.or_date);
-            $('#viewAmountPaid').text(user.amount_paid);
+            $('#viewapplication_number').text(user.application_number);
             $('#viewDocumentStatus').text(user.document_status);
 
             // Handle image files
@@ -661,64 +637,52 @@ include('../admin/assets/inc/footer.php');
         $('#imageViewModal').modal('show');
     }
 
+   
     // Function to update the document status
     function updateDocumentStatus(status) {
-        var viewId = $('#hiddendata').val(); // Make sure this input exists and has a value
+        var viewId = $('#hiddendata').val(); // Ensure this input exists and has a value
 
-        // Debugging logs
         console.log("View ID:", viewId);
         console.log("Document Status:", status);
 
-        // Check if the viewId and status are not empty
         if (!viewId || !status) {
             alert("View ID or Document Status is missing.");
             return;
         }
 
         $.post("admin_registration_list_update_status.php", {
-                    viewid: viewId,
-                    document_status: status
-                },
-                //approve button
-                function(data) {
-                    console.log("Response:", data);
-                    if (data.success) {
-                        $('#viewDocumentStatus').text(status);
-                        alert("Document status updated to " + status + " and QR code has been sent to the user's email.");
-                        $('#viewModal').modal('hide');
-                        displayData(); // Refresh the list
+            viewid: viewId,
+            document_status: status
+        }, function(data) {
+            console.log("Response:", data);
 
-                        // Additional action for sending email if status is 'Approved'
-                        if (status === 'Approved') {
-                            $.ajax({
-                                url: 'send_qr_email.php', // PHP script for QR generation and email
-                                type: 'POST',
-                                data: {
-                                    email: data.email, // Applicant's email from the backend response
-                                },
-                                success: function(response) {
-                                    console.log("QR Code email sent successfully:", response);
-                                },
-                                error: function(jqXHR, textStatus, errorThrown) {
-                                    console.error("Failed to send QR Code email:", textStatus, errorThrown);
-                                }
-                            });
-                        }
+            if (data.success) {
+                $('#viewDocumentStatus').text(status);
+                alert("Document status updated to " + status);
 
-                        if (status === 'Rejected') {
-                            alert("Your document was rejected. Please refill the renewal update form.");
-                            window.location.href = "./admin_registration_list.php";
-                        }
-                    } else {
-                        alert("Failed to update the document status: " + data.error);
-                    }
-                }, "json")
-            .fail(function(jqXHR, textStatus, errorThrown) {
-                console.error("AJAX request failed: " + textStatus + ", " + errorThrown);
-                alert("AJAX request failed: " + textStatus);
-            });
+                // Additional action for approved status
+                if (status === 'Approved') {
+                    alert("Document has been approved and marked as 'Released'.");
+                }
 
+                // Additional action for rejected status
+                if (status === 'Rejected') {
+                    alert("Document has been rejected. Application status updated to 'Needs Correction'. The user needs to resubmit.");
+                }
+
+                $('#viewModal').modal('hide');
+                displayData(); // Refresh the list
+            } else {
+                alert("Failed to update the document status: " + data.error);
+            }
+        }, "json")
+        .fail(function(jqXHR, textStatus, errorThrown) {
+            console.error("AJAX request failed: " + textStatus + ", " + errorThrown);
+            alert("AJAX request failed: " + textStatus);
+        });
     }
+
+
 </script>
 
 

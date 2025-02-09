@@ -193,7 +193,7 @@ include('../user/assets/inc/navbar.php');
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="viewModalLabel">View Registration Details</h5>
+                <h5 class="modal-title" id="viewModalLabel">View Renewal Details</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -330,26 +330,32 @@ include('../user/assets/inc/footer.php');
 
 
     // Update record function (make sure to include correct ids)
-    function getdetails(updateid) {
-        $('#hiddendata').val(updateid);
-        
+        function getdetails(updateid) {
         $.post("user_renewal_list_update.php", { updateid: updateid }, function(data, status) {
-            var userid = JSON.parse(data);
+            var user = JSON.parse(data);
 
-            $('#updateFirstname').val(userid.fname);
-            $('#updateLastname').val(userid.lname);
-            $('#updateEmail').val(userid.email);
-            $('#updatePhone').val(userid.phone);
-            $('#updateAddress').val(userid.address);
-            $('#updateBusinessName').val(userid.business_name);
-            $('#updateCommercialAddress').val(userid.business_address);
-            $('#updateDateofApplication').val(userid.date_application);
-            $('#updatePeriodofDate').val(userid.period_date);
+            // Populate the update modal fields
+            $('#updateFirstname').val(user.fname);
+            $('#updateMiddlename').val(user.mname);
+            $('#updateLastname').val(user.lname);
+            $('#updateEmail').val(user.email);
+            $('#updatePhone').val(user.phone);
+            $('#updateAddress').val(user.address);
+            $('#updateBusinessName').val(user.business_name);
+            $('#updateBusinessAddress').val(user.business_address);
+            $('#updateBuildingName').val(user.building_name);
+            $('#updateBuildingNo').val(user.building_no);
+            $('#updateStreet').val(user.street);
+            $('#updateBarangay').val(user.barangay);
+            $('#updateBusinessType').val(user.business_type);
+            $('#updateRentPerMonth').val(user.rent_per_month);
+            $('#updateDateofApplication').val(user.date_application);
+            $('#updateapplication_number').val(user.application_number);
+
+            // Show the update modal
+            $('#updateModal').modal("show");
         });
-
-        $('#updateModal').modal("show");
     }
-
     // Update getdetails function
     function getdetails(updateid) {
         $('#hiddendata').val(updateid);

@@ -152,24 +152,12 @@ include('../user/assets/inc/navbar.php');
                     <input type="text" class="form-control" id="updateRentPerMonth" placeholder="Rent Per Month">
                 </div>
                 <div class="mb-3">
-                    <label for="updatePeriodofDate" class="form-label">Period of Date:</label>
-                    <input type="text" class="form-control" id="updatePeriodofDate" placeholder="Period of Date">
-                </div>
-                <div class="mb-3">
                     <label for="updateDateofApplication" class="form-label">Date of Application:</label>
                     <input type="date" class="form-control" id="updateDateofApplication" placeholder="Date of Application">
                 </div>
                 <div class="mb-3">
-                    <label for="updateReceipt" class="form-label">Receipt:</label>
-                    <input type="text" class="form-control" id="updateReceipt" placeholder="Receipt">
-                </div>
-                <div class="mb-3">
-                    <label for="updateOrDate" class="form-label">OR Date:</label>
-                    <input type="date" class="form-control" id="updateOrDate" placeholder="OR Date">
-                </div>
-                <div class="mb-3">
-                    <label for="updateAmountPaid" class="form-label">Amount Paid:</label>
-                    <input type="text" class="form-control" id="updateAmountPaid" placeholder="Amount Paid">
+                    <label for="updateapplication_number" class="form-label">application_number:</label>
+                    <input type="text" class="form-control" id="updateapplication_number" placeholder="application_number">
                 </div>
                 <div class="mb-3">
                     <label for="updateUploadDti" class="form-label">Upload DTI:</label>

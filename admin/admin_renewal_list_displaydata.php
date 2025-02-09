@@ -6,10 +6,9 @@ $status = isset($_POST['displaysend']) ? $_POST['displaysend'] : 'All';
 
 // Build the query based on the filter status
 if ($status === 'All') {
-    $query = "SELECT email, business_name, business_address, business_type, period_date, date_application, document_status, id FROM renewal"; 
+    $query = "SELECT email, business_name, business_address, business_type, application_status, document_status, date_application, id FROM renewal"; 
 } else {
-    $query = "SELECT email, business_name, business_address, business_type, period_date, date_application, document_status, id 
-              FROM renewal 
+    $query = "SELECT email, business_name, business_address, business_type, application_status, document_status, date_application, id FROM renewal 
               WHERE document_status = '$status'";
 }
 
@@ -18,14 +17,14 @@ $result = mysqli_query($conn, $query);
 if (mysqli_num_rows($result) > 0) {
     echo '<table class="table table-striped">';
     echo '<thead>
-            <tr>
+           <tr>
                 <th>Email</th>
                 <th>Business Name</th>
                 <th>Business Address</th>
                 <th>Business Type</th>
-                <th>Period Date</th>
                 <th>Date of Application</th>
                 <th>Document Status</th>
+                <th>Application Status</th>
                 <th>Actions</th>
             </tr>
           </thead>';
@@ -37,8 +36,8 @@ if (mysqli_num_rows($result) > 0) {
                 <td>' . htmlspecialchars($row['business_name']) . '</td>
                 <td>' . htmlspecialchars($row['business_address']) . '</td>
                 <td>' . htmlspecialchars($row['business_type']) . '</td>
-                <td>' . htmlspecialchars($row['period_date']) . '</td>
                 <td>' . htmlspecialchars($row['date_application']) . '</td>
+                <td>' . htmlspecialchars($row['application_status']) . '</td>
                 <td>' . htmlspecialchars($row['document_status']) . '</td>
                 <td>
                     <div class="dropdown">

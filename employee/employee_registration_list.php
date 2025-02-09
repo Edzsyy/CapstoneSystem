@@ -158,25 +158,11 @@ include('../employee/assets/inc/navbar.php');
                     <input type="text" class="form-control" id="updateRentPerMonth">
                 </div>
                 <div class="mb-3">
-                    <label for="updatePeriodofDate" class="form-label">Period of Date</label>
-                    <input type="text" class="form-control" id="updatePeriodofDate">
-                </div>
-                <div class="mb-3">
                     <label for="updateDateofApplication" class="form-label">Date of Application</label>
                     <input type="date" class="form-control" id="updateDateofApplication">
                 </div>
-                <div class="mb-3">
-                    <label for="updateReceipt" class="form-label">Receipt</label>
-                    <input type="text" class="form-control" id="updateReceipt">
-                </div>
-                <div class="mb-3">
-                    <label for="updateOrDate" class="form-label">OR Date</label>
-                    <input type="date" class="form-control" id="updateOrDate">
-                </div>
-                <div class="mb-3">
-                    <label for="updateAmountPaid" class="form-label">Amount Paid</label>
-                    <input type="text" class="form-control" id="updateAmountPaid">
-                </div>
+                
+
                 <!-- File Upload Inputs -->
                 <div class="mb-3">
                     <label for="updateUploadDti" class="form-label">Upload DTI</label>
@@ -240,19 +226,16 @@ include('../employee/assets/inc/navbar.php');
                             <p><strong>Barangay:</strong> <span id="viewBarangay"></span></p>
                             <p><strong>Business Type:</strong> <span id="viewBusinessType"></span></p>
                             <p><strong>Rent per Month:</strong> <span id="viewRentPerMonth"></span></p>
-                            <p><strong>Period Date:</strong> <span id="viewPeriodDate"></span></p>
                             <p><strong>Date of Application:</strong> <span id="viewDateofApplication"></span></p>
-                            <p><strong>Receipt:</strong> <span id="viewReceipt"></span></p>
-                            <p><strong>OR Date:</strong> <span id="viewOrDate"></span></p>
-                            <p><strong>Amount Paid:</strong> <span id="viewAmountPaid"></span></p>
+                            <p><strong>application_number:</strong> <span id="viewapplication_number"></span></p>
                             <p><strong>Status:</strong> <span id="viewDocumentStatus"></span></p> <!-- Added Status -->
                         </div>
                     </div>
                 </div>
                 <input type="hidden" id="hiddendata" value="">
                 <div class="modal-footer">
-                <button type="button" class="btn btn-success" onclick="updateDocumentStatus('Approved')">Approve</button>
-                <button type="button" class="btn btn-danger" onclick="updateDocumentStatus('Rejected')">Reject</button>
+                <button class="btn btn-success update-status-btn" data-status="Approved">Approve</button>
+                <button class="btn btn-danger update-status-btn" data-status="Rejected">Reject</button>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
@@ -274,7 +257,6 @@ include('../employee/assets/inc/navbar.php');
         </div>
     </div>
 </div>
-
 
 
 
@@ -301,9 +283,7 @@ include('../employee/assets/inc/navbar.php');
                 <li class="nav-item">
                     <a class="nav-link" data-bs-toggle="tab" href="#pending" onclick="filterData('pending')">Pending</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" data-bs-toggle="tab" href="#rejected" onclick="filterData('rejected')">Rejected</a>
-                </li>
+                
             </ul>
 
             <div class="row">
@@ -316,7 +296,6 @@ include('../employee/assets/inc/navbar.php');
         </div>
     </div>
 </div>
-
 
 
 <?php 
@@ -345,8 +324,6 @@ include('../employee/assets/inc/footer.php');
     }
 
 
-
-
     //delete function
     function deleteuser(deleteid)
     {
@@ -363,7 +340,6 @@ include('../employee/assets/inc/footer.php');
         });
     }
 
- 
 
     // Function to get user details and populate the update modal
     function getdetails(updateid) {
@@ -387,8 +363,7 @@ include('../employee/assets/inc/footer.php');
             $('#updatePeriodofDate').val(user.period_date);
             $('#updateDateofApplication').val(user.date_application);
             $('#updateReceipt').val(user.receipt);
-            $('#updateOrDate').val(user.or_date);
-            $('#updateAmountPaid').val(user.amount_paid);
+          
             // Optionally set values for the uploaded files
             $('#updateModal').modal("show");
         });
@@ -412,11 +387,7 @@ include('../employee/assets/inc/footer.php');
         updateData.append('barangay', $('#updateBarangay').val());
         updateData.append('business_type', $('#updateBusinessType').val());
         updateData.append('rent_per_month', $('#updateRentPerMonth').val());
-        updateData.append('period_date', $('#updatePeriodofDate').val());
         updateData.append('date_application', $('#updateDateofApplication').val());
-        updateData.append('receipt', $('#updateReceipt').val());
-        updateData.append('or_date', $('#updateOrDate').val());
-        updateData.append('amount_paid', $('#updateAmountPaid').val());
         updateData.append('upload_dti', $('#updateUploadDti')[0].files[0]);
         updateData.append('upload_store_picture', $('#updateUploadStorePicture')[0].files[0]);
         updateData.append('food_security_clearance', $('#updateFoodSecurityClearance')[0].files[0]);
@@ -435,9 +406,6 @@ include('../employee/assets/inc/footer.php');
         });
     }
 
-
-    
-
     // view function for displaying user details including image files
     function viewDetails(viewid) {
         $.post("employee_registration_list_view.php", { viewid: viewid }, function(data, status) {
@@ -452,8 +420,8 @@ include('../employee/assets/inc/footer.php');
             // Set the hidden input value to the viewId
              $('#hiddendata').val(viewid)
 
-            // Populate the modal fields with the fetched data
-            $('#viewFirstname').text(user.fname);
+           // Populate the modal fields with the fetched data
+           $('#viewFirstname').text(user.fname);
             $('#viewMiddlename').text(user.mname);
             $('#viewLastname').text(user.lname);
             $('#viewEmail').text(user.email);
@@ -468,11 +436,8 @@ include('../employee/assets/inc/footer.php');
             $('#viewBarangay').text(user.barangay);
             $('#viewBusinessType').text(user.business_type);
             $('#viewRentPerMonth').text(user.rent_per_month);
-            $('#viewPeriodDate').text(user.period_date);
             $('#viewDateofApplication').text(user.date_application);
-            $('#viewReceipt').text(user.reciept);
-            $('#viewOrDate').text(user.or_date);
-            $('#viewAmountPaid').text(user.amount_paid);
+            $('#viewapplication_number').text(user.application_number);
             $('#viewDocumentStatus').text(user.document_status);
 
             // Handle image files
@@ -506,46 +471,56 @@ include('../employee/assets/inc/footer.php');
         $('#imageViewModal').modal('show');
     }
 
-    // Function to update the document status
-    function updateDocumentStatus(status) {
-            var viewId = $('#hiddendata').val(); // Make sure this input exists and has a value
+  
+   // Function to update document status and handle application status
+    function updateDocumentStatus(viewid, newStatus) {
+        $.ajax({
+            url: "employee_registration_list_update_status.php",  // Ensure this matches your PHP file
+            type: "POST",
+            data: {
+                viewid: viewid,
+                document_status: newStatus
+            },
+            dataType: "json",
+            success: function(response) {
+                if (response.success) {
+                    alert("Status updated successfully!");
 
-            // Debugging logs
-            console.log("View ID:", viewId);
-            console.log("Document Status:", status);
+                    // Update the displayed status dynamically
+                    $('#viewDocumentStatus').text(newStatus);
 
-            // Check if the viewId and status are not empty
-            if (!viewId || !status) {
-                alert("View ID or Document Status is missing.");
-                return;
-            }
-
-            $.post("employee_registration_list_update_status.php", 
-            {
-                viewid: viewId,
-                document_status: status
-            }, 
-            function(data) {
-                console.log("Response:", data);
-                if (data.success) {
-                    $('#viewDocumentStatus').text(status); 
-                    alert("Document status updated to " + status);
-                    $('#viewModal').modal('hide');
-                    displayData(); // Refresh the list
-
-                    if (status === 'Rejected') {
-                        alert("Your document was rejected. Please refill the renewal update form.");
-                        window.location.href = "./employee_registration_list.php";
+                    // If approved or rejected, update the application status display
+                    if (newStatus === 'Rejected') {
+                        $('#viewApplicationStatus').text('Needs Correction');
+                    } else if (newStatus === 'Approved') {
+                        $('#viewApplicationStatus').text('Released');
                     }
+
+                    // Hide the modal after updating
+                    $('#viewModal').modal('hide');
                 } else {
-                    alert("Failed to update the document status: " + data.error);
+                    alert("Error: " + response.error);
                 }
-            }, "json")
-            .fail(function(jqXHR, textStatus, errorThrown) {
-                console.error("AJAX request failed: " + textStatus + ", " + errorThrown);
-                alert("AJAX request failed: " + textStatus);
-            });
+            },
+            error: function(xhr, status, error) {
+                console.error("AJAX Error:", status, error);
+                alert("An error occurred while updating. Please try again.");
+            }
+        });
+    }
+
+    // Event listener for updating document status
+    $(document).on('click', '.update-status-btn', function() {
+        var viewid = $('#hiddendata').val();  // Get the hidden input ID
+        var newStatus = $(this).data('status'); // Get the status from button data attribute
+
+        if (viewid) {
+            updateDocumentStatus(viewid, newStatus);
+        } else {
+            alert("Error: Missing record ID.");
         }
+    });
+
 
     
 

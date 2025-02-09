@@ -1,11 +1,11 @@
 <?php 
-include('../admin/assets/config/dbconn.php');
+include('../employee/assets/config/dbconn.php');
 
-include('../admin/assets/inc/header.php');
+include('../employee/assets/inc/header.php');
 
-include('../admin/assets/inc/sidebar.php');
+include('../employee/assets/inc/sidebar.php');
 
-include('../admin/assets/inc/navbar.php');
+include('../employee/assets/inc/navbar.php');
 
 ?> 
 
@@ -19,7 +19,7 @@ include('../admin/assets/inc/navbar.php');
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <script src="../admin/assets/js/html5-qrcode.min.js"></script>
+                <script src="../employee/assets/js/html5-qrcode.min.js"></script>
                 <style>
                     .result { background-color: green; color: #fff; padding: 20px; }
                     .row { display: flex; }
@@ -90,9 +90,9 @@ include('../admin/assets/inc/navbar.php');
 </div>
 <!-- End QR code Modal -->
 
-<!-- Update Renewal Modal -->
+<!---update renewal-->
 <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <h1 class="modal-title fs-5" id="updateModalLabel">Update User</h1>
@@ -156,12 +156,14 @@ include('../admin/assets/inc/navbar.php');
                     <label for="updateRentPerMonth" class="form-label">Rent Per Month:</label>
                     <input type="text" class="form-control" id="updateRentPerMonth" placeholder="Rent Per Month">
                 </div>
-               
                 <div class="mb-3">
                     <label for="updateDateofApplication" class="form-label">Date of Application:</label>
                     <input type="date" class="form-control" id="updateDateofApplication" placeholder="Date of Application">
                 </div>
-                
+                <div class="mb-3">
+                    <label for="updateapplication_number" class="form-label">application_number:</label>
+                    <input type="text" class="form-control" id="updateapplication_number" placeholder="application_number">
+                </div>
                 <div class="mb-3">
                     <label for="updateUploadDti" class="form-label">Upload DTI:</label>
                     <input type="file" class="form-control" id="updateUploadDti">
@@ -188,16 +190,15 @@ include('../admin/assets/inc/navbar.php');
         </div>
     </div>
 </div>
-<!-- End Update Renewal Modal -->
+<!---end update renewal-->
 
 
-
-<!-- View renewal Modal -->
+<!-- View Renewal Modal -->
 <div class="modal fade" id="viewModal" tabindex="-1" aria-labelledby="viewModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="viewModalLabel">View Registration Details</h5>
+                <h5 class="modal-title" id="viewModalLabel">View Renewal Details</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -221,11 +222,10 @@ include('../admin/assets/inc/navbar.php');
                             <img id="viewUploadOldPermit" src="default_upload_old_permit.jpg" alt="Old Permit" class="img-fluid rounded" onclick="showImageInModal(viewUploadOldPermit.src)">
                         </div>
                     </div>
-                    
                     <!-- Text Details Section -->
                     <div class="col-md-8">
                         <div class="border p-3">
-                            <h5>User Details</h5>
+                        <h5>User Details</h5>
                             <p><strong>First Name:</strong> <span id="viewFirstname"></span></p>
                             <p><strong>Middle Name:</strong> <span id="viewMiddlename"></span></p>
                             <p><strong>Last Name:</strong> <span id="viewLastname"></span></p>
@@ -243,8 +243,10 @@ include('../admin/assets/inc/navbar.php');
                             <p><strong>Rent per Month:</strong> <span id="viewRentPerMonth"></span></p>
                             <p><strong>Date of Application:</strong> <span id="viewDateofApplication"></span></p>
                             <p><strong>application_number:</strong> <span id="viewapplication_number"></span></p>
-                
-                            <div class="border p-3">
+                            <p><strong>Document Status:</strong> <span id="viewDocumentStatus"></span></p>
+                            <p><strong>Application Status:</strong> <span id="viewApplicationStatus"></span></p>
+                            <p><strong>Resubmit Reason:</strong> <span id="viewResubmitReason"></span></p>
+                            <div class="border p-4">
                                 <h5>Status:</h5>
                                 <span id="viewDocumentStatus"></span>
                             </div>
@@ -252,17 +254,21 @@ include('../admin/assets/inc/navbar.php');
                     </div>
                 </div>
             </div>
+               <!-- Employee Comments Section (Only shown when resubmitting) -->
+               <div class="mt-3" id="resubmitSection" style="display: none;">
+                    <label for="employeeComments" class="form-label">Reason for Resubmission:</label>
+                    <textarea class="form-control" id="employeeComments" rows="3" placeholder="Enter reason for resubmission"></textarea>
+                </div>
+            </div>
             <input type="hidden" id="hiddendata" value="">
-            <div class="modal-footer">
-                <button type="button" class="btn btn-success" onclick="updateDocumentStatus('Approved')">Approve</button>
-                <button type="button" class="btn btn-danger" onclick="updateDocumentStatus('Rejected')">Reject</button>
+            <div class="modal-footer" class="mt-3">
+                <button type="button" class="btn btn-success" onclick="updateDocumentStatus('Released')" id="releaseButton">Release</button>
+                <button type="button" class="btn btn-warning" onclick="showResubmitSection()" id="resubmitButton">Resubmit</button>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
 </div>
-<!-- View renewal Modal end -->
-
 
 <!-- Image View Modal -->
 <div class="modal fade" id="imageViewModal" tabindex="-1" aria-labelledby="imageViewModalLabel" aria-hidden="true">
@@ -304,7 +310,7 @@ include('../admin/assets/inc/navbar.php');
                 <li class="nav-item">
                     <a class="nav-link" data-bs-toggle="tab" href="#pending" onclick="filterData('Pending')">Pending</a>
                 </li>
-                
+
             </ul>
 
             <div class="tab-content">
@@ -317,19 +323,17 @@ include('../admin/assets/inc/navbar.php');
                 <div class="tab-pane fade" id="pending">
                     <div id="displayDataTablePending"></div>
                 </div>
-                
+                <div class="tab-pane fade" id="rejected">
+                    <div id="displayDataTableRejected"></div>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
-
-
-
-
-
+<!-- Image Modal -->    
 <?php 
-include('../admin/assets/inc/footer.php');
+include('../employee/assets/inc/footer.php');
 ?> 
 
 
@@ -341,7 +345,7 @@ include('../admin/assets/inc/footer.php');
     // Filter function
     function filterData(status) {
         $.ajax({
-            url: "admin_renewal_list_displaydata.php",
+            url: "employee_renewal_list_displaydata.php",
             type: 'post',
             data: { displaysend: status },
             success: function(data) {
@@ -351,18 +355,16 @@ include('../admin/assets/inc/footer.php');
                     $('#displayDataTableApproved').html(data);
                 } else if (status === 'Pending') {
                     $('#displayDataTablePending').html(data);
-                }
+                } 
             }
         });
     }
-
-
 
     //delete function
     function deleteuser(deleteid)
     {
         $.ajax({
-            url:"admin_renewal_list_delete.php",
+            url:"employee_renewal_list_delete.php",
             type:'post',
             data:{
                 deletesend:deleteid
@@ -375,12 +377,55 @@ include('../admin/assets/inc/footer.php');
     }
 
 
+    
+
+    // Function to update the document status
+    function updateDocumentStatus(status) {
+        var viewId = $('#hiddendata').val(); // Make sure this input exists and has a value
+
+        // Debugging logs
+        console.log("View ID:", viewId);
+        console.log("Document Status:", status);
+
+        // Check if the viewId and status are not empty
+        if (!viewId || !status) {
+            alert("View ID or Document Status is missing.");
+            return;
+        }
+
+        $.post("employee_renewal_list_update_status.php", 
+        {
+            viewid: viewId,
+            document_status: status
+        }, 
+        function(data) {
+            console.log("Response:", data);
+            if (data.success) {
+                $('#viewDocumentStatus').text(status); 
+                alert("Document status updated to " + status);
+                $('#viewModal').modal('hide');
+                displayData(); // Refresh the list
+
+                if (status === 'Rejected') {
+                    alert("Your document was rejected. Please refill the renewal update form.");
+                    window.location.href = "./employee_renewal_list.php";
+                }
+            } else {
+                alert("Failed to update the document status: " + data.error);
+            }
+        }, "json")
+        .fail(function(jqXHR, textStatus, errorThrown) {
+            console.error("AJAX request failed: " + textStatus + ", " + errorThrown);
+            alert("AJAX request failed: " + textStatus);
+        });
+    }
+
     // Function to get user details and populate the update modal
     function getdetails(updateid) {
         $('#updateId').val(updateid);
 
         // Make an AJAX request to fetch the details for the selected user
-        $.post("admin_renewal_get_details.php", { updateid: updateid }, function(data, status) {
+        $.post("employee_renewal_get_details.php", { updateid: updateid }, function(data, status) {
             var user = JSON.parse(data);
 
             // Populate the form fields with the fetched user data
@@ -443,7 +488,7 @@ include('../admin/assets/inc/footer.php');
     
     // view function for displaying user details including image files
     function viewDetails(viewid) {
-        $.post("admin_renewal_list_view.php", { viewid: viewid }, function(data, status) {
+        $.post("employee_renewal_list_view.php", { viewid: viewid }, function(data, status) {
             var user = JSON.parse(data);
 
             if (user.error) {
@@ -454,8 +499,8 @@ include('../admin/assets/inc/footer.php');
             // Set the hidden input value to the viewId
             $('#hiddendata').val(viewid)
 
-           // Populate the modal fields with the fetched data
-           $('#viewFirstname').text(user.fname);
+            // Populate the modal fields with the fetched data
+            $('#viewFirstname').text(user.fname);
             $('#viewMiddlename').text(user.mname);
             $('#viewLastname').text(user.lname);
             $('#viewEmail').text(user.email);
@@ -470,8 +515,11 @@ include('../admin/assets/inc/footer.php');
             $('#viewBarangay').text(user.barangay);
             $('#viewBusinessType').text(user.business_type);
             $('#viewRentPerMonth').text(user.rent_per_month);
+            $('#viewPeriodDate').text(user.period_date);
             $('#viewDateofApplication').text(user.date_application);
-            $('#viewapplication_number').text(user.application_number);
+            $('#viewReceipt').text(user.reciept);
+            $('#viewOrDate').text(user.or_date);
+            $('#viewAmountPaid').text(user.amount_paid);
             $('#viewDocumentStatus').text(user.document_status);
 
             // Handle image files
@@ -505,48 +553,51 @@ include('../admin/assets/inc/footer.php');
     }
 
     // Function to show the image in a larger modal
-    function updateDocumentStatus(status) {
-        var viewId = $('#hiddendata').val(); // Ensure this input exists and has a value
-
-        console.log("View ID:", viewId);
-        console.log("Document Status:", status);
-
-        if (!viewId || !status) {
-            alert("View ID or Document Status is missing.");
-            return;
-        }
-
-        $.post("admin_renewal_list_update_status.php", {
-            viewid: viewId,
-            document_status: status
-        }, function(data) {
-            console.log("Response:", data);
-
-            if (data.success) {
-                $('#viewDocumentStatus').text(status);
-                alert("Document status updated to " + status);
-
-                // Additional action for approved status
-                if (status === 'Approved') {
-                    alert("Document has been approved and marked as 'Released'.");
-                }
-
-                // Additional action for rejected status
-                if (status === 'Rejected') {
-                    alert("Document has been rejected. Application status updated to 'Needs Correction'. The user needs to resubmit.");
-                }
-
-                $('#viewModal').modal('hide');
-                displayData(); // Refresh the list
-            } else {
-                alert("Failed to update the document status: " + data.error);
-            }
-        }, "json")
-        .fail(function(jqXHR, textStatus, errorThrown) {
-            console.error("AJAX request failed: " + textStatus + ", " + errorThrown);
-            alert("AJAX request failed: " + textStatus);
-        });
+    function showImageInModal(imageUrl) {
+        $('#imagePreview').attr('src', imageUrl);
+        $('#imageViewModal').modal('show');
     }
+
+            // Function to update the document status
+            function updateDocumentStatus(status) {
+            var viewId = $('#hiddendata').val(); // Make sure this input exists and has a value
+
+            // Debugging logs
+            console.log("View ID:", viewId);
+            console.log("Document Status:", status);
+
+            // Check if the viewId and status are not empty
+            if (!viewId || !status) {
+                alert("View ID or Document Status is missing.");
+                return;
+            }
+
+            $.post("employee_renewal_list_update_status.php", 
+            {
+                viewid: viewId,
+                document_status: status
+            }, 
+            function(data) {
+                console.log("Response:", data);
+                if (data.success) {
+                    $('#viewDocumentStatus').text(status); 
+                    alert("Document status updated to " + status);
+                    $('#viewModal').modal('hide');
+                    displayData(); // Refresh the list
+
+                    if (status === 'Rejected') {
+                        alert("Your document was rejected. Please refill the renewal update form.");
+                        window.location.href = "./employee_renewal_list.php";
+                    }
+                } else {
+                    alert("Failed to update the document status: " + data.error);
+                }
+            }, "json")
+            .fail(function(jqXHR, textStatus, errorThrown) {
+                console.error("AJAX request failed: " + textStatus + ", " + errorThrown);
+                alert("AJAX request failed: " + textStatus);
+            });
+        }
 
 </script>
 

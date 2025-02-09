@@ -37,11 +37,8 @@ if (isset($_POST['viewid']) && filter_var($_POST['viewid'], FILTER_VALIDATE_INT)
                 'barangay' => htmlspecialchars($user['barangay']),
                 'business_type' => htmlspecialchars($user['business_type']),
                 'rent_per_month' => htmlspecialchars($user['rent_per_month']),
-                'period_date' => htmlspecialchars($user['period_date']),
                 'date_application' => htmlspecialchars($user['date_application']),
-                'receipt' => htmlspecialchars($user['reciept']), // Correct this in the database as well
-                'or_date' => htmlspecialchars($user['or_date']),
-                'amount_paid' => htmlspecialchars($user['amount_paid']),
+                'application_number' => htmlspecialchars($user['application_number']), // Correct this in the database as well
                 'store_picture_url' => $storePicture,
                 'food_security_clearance_url' => $foodSecurityClearance,
                 'upload_dti_url' => $uploadDti,

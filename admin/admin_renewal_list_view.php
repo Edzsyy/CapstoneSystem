@@ -32,15 +32,12 @@ if (isset($_POST['viewid']) && filter_var($_POST['viewid'], FILTER_VALIDATE_INT)
                 'barangay' => htmlspecialchars($user['barangay']),
                 'business_type' => htmlspecialchars($user['business_type']),
                 'rent_per_month' => htmlspecialchars($user['rent_per_month']),
-                'period_date' => htmlspecialchars($user['period_date']),
                 'date_application' => htmlspecialchars($user['date_application']),
-                'reciept' => htmlspecialchars($user['reciept']),
-                'or_date' => htmlspecialchars($user['or_date']),
-                'amount_paid' => htmlspecialchars($user['amount_paid']),
+                'application_number' => htmlspecialchars($user['application_number']),
                 'store_picture_url' => htmlspecialchars($user['upload_store_picture']), // Image path
                 'food_security_clearance_url' => htmlspecialchars($user['food_security_clearance']), // Image path
                 'upload_dti_url' => htmlspecialchars($user['upload_dti']), // Image path
-                'upload_old_permit_url' => htmlspecialchars($user['upload_old_permit']), // Image path
+                'upload_old_permit_url' => htmlspecialchars($user['upload_old_permit']),// Image path
                 'document_status' => htmlspecialchars($user['document_status']) // Include document status
             ]);
         } else {

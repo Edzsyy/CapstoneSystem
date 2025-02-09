@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 18, 2024 at 08:29 AM
+-- Generation Time: Feb 09, 2025 at 05:44 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -94,29 +94,31 @@ CREATE TABLE `registration` (
   `barangay` varchar(255) NOT NULL,
   `business_type` varchar(255) NOT NULL,
   `rent_per_month` varchar(255) NOT NULL,
-  `period_date` date DEFAULT NULL,
   `date_application` date NOT NULL,
-  `reciept` varchar(255) NOT NULL,
-  `or_date` date NOT NULL,
-  `amount_paid` decimal(10,2) DEFAULT NULL,
+  `application_number` varchar(50) DEFAULT NULL,
   `upload_dti` varchar(255) NOT NULL,
   `upload_store_picture` varchar(255) DEFAULT NULL,
   `food_security_clearance` varchar(255) DEFAULT NULL,
   `document_status` varchar(50) DEFAULT 'Pending',
-  `permit_expiration` date DEFAULT NULL
+  `permit_expiration` date DEFAULT NULL,
+  `needs_resubmission` tinyint(1) DEFAULT 0,
+  `expiration_date` date DEFAULT NULL,
+  `application_status` varchar(50) DEFAULT NULL,
+  `remark` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `registration`
 --
 
-INSERT INTO `registration` (`id`, `fname`, `mname`, `lname`, `address`, `zip`, `business_name`, `phone`, `email`, `business_address`, `building_name`, `building_no`, `street`, `barangay`, `business_type`, `rent_per_month`, `period_date`, `date_application`, `reciept`, `or_date`, `amount_paid`, `upload_dti`, `upload_store_picture`, `food_security_clearance`, `document_status`, `permit_expiration`) VALUES
-(11, 'Edgeniel', 'qwer', 'Buhian', 'Manila', '9876', 'walmart', '09123456789', 'edgeniel@mail.com', 'Caloocan City', 'qwer', '12', 'qwe', 'qwer', 'shabu shabu', '500', '2024-09-19', '2024-09-19', '', '2024-09-19', 1000.00, '1726724434profile.png', NULL, NULL, 'Pending', '2025-09-19'),
-(79, 'me', 'me ', 'hello', 'san diego', '1234', 'comporate', '2323213', 'james@gmail.com', 'the one ', 'green house', '114', 'dimakilala', 'pasong tamo', 'comporate', '1231231', '2024-10-15', '2024-10-15', 'NA', '2024-10-15', 1000.00, '1728935942olli-the-polite-cat.jpg', '1728935942images.jpg', '1728935942b9c47ef70bff06613d397abfce02c6e7.jpg', 'Pending', '2025-10-15'),
-(80, 'brian', 'like', 'tepase', 'pasong tamo', '1234', 'comporate', '09303327150', 'briantepase@gmail.com', 'the one ', 'green house', '114', 'dimakilala', 'pasong tamo', 'comporate', '1231231', NULL, '0000-00-00', 'REC-202410160001', '2024-10-16', 1000.00, '1729039003629544.jpg', '1729039003629544.jpg', '1729039003629544.jpg', 'Pending', NULL),
-(82, 'me', 'me ', 'hello', 'san diego', '1234', 'comporate', '2323213', 'james@gmail.com', 'the one ', 'green house', '114', 'dimakilala', 'pasong tamo', 'comporate', '1231231', NULL, '2024-10-18', 'REC-202410170001', '2024-10-18', 1000.00, '1729188008629544.jpg', '1729188008629544.jpg', '1729188008629544.jpg', 'Pending', NULL),
-(83, 'me', 'me ', 'hello', 'san diego', '1234', 'comporate', '2323213', 'james@gmail.com', 'the one ', 'green house', '114', 'dimakilala', 'pasong tamo', 'comporate', '1231231', NULL, '2024-10-17', 'REC-202410170002', '2024-10-18', 1000.00, '1729189305629544.jpg', '1729189305629544.jpg', '1729189305629544.jpg', 'Pending', NULL),
-(85, 'me', 'me ', 'hello', 'san diego', '1234', 'comporate', '2323213', 'james@gmail.com', 'the one ', 'green house', '114', 'dimakilala', 'pasong tamo', 'comporate', '1231231', NULL, '2024-10-17', 'REC-202410170003', '2024-10-18', 1000.00, '1729191373629544.jpg', '1729191373629544.jpg', '1729191373629544.jpg', 'Pending', NULL);
+INSERT INTO `registration` (`id`, `fname`, `mname`, `lname`, `address`, `zip`, `business_name`, `phone`, `email`, `business_address`, `building_name`, `building_no`, `street`, `barangay`, `business_type`, `rent_per_month`, `date_application`, `application_number`, `upload_dti`, `upload_store_picture`, `food_security_clearance`, `document_status`, `permit_expiration`, `needs_resubmission`, `expiration_date`, `application_status`, `remark`) VALUES
+(11, 'Edgeniel', 'qwer', 'Buhian', 'Manila', '9876', 'walmart', '09123456789', 'edgeniel@mail.com', 'Caloocan City', 'qwer', '12', 'qwe', 'qwer', 'shabu shabu', '500', '2024-09-19', '', '1726724434profile.png', NULL, NULL, 'Rejected', '2025-09-19', 1, NULL, NULL, NULL),
+(85, 'me', 'me ', 'hello', 'san diego', '1234', 'comporate', '2323213', 'james@gmail.com', 'the one ', 'green house', '114', 'dimakilala', 'pasong tamo', 'comporate', '1231231', '2024-10-17', 'REC-202410170003', '1729191373629544.jpg', '1729191373629544.jpg', '1729191373629544.jpg', 'Approved', NULL, 0, NULL, NULL, NULL),
+(87, 'brian', 'like', 'tepase', 'pasong tamo', '1234', 'comporate', '09303327150', 'briantepase@gmail.com', 'the one ', 'green house', '114', 'dimakilala', 'pasong tamo', 'comporate', '1231231', '2024-10-25', 'REC-202410250002', '1729874940olli-the-polite-cat.jpg', '1729874940olli-the-polite-cat.jpg', '1729874940olli-the-polite-cat.jpg', 'Rejected', NULL, 1, NULL, NULL, NULL),
+(91, 'for', 'me ', 'education', 'san diego', '1234', 'comporate', '2323213', 'james@gmail.com', 'the one ', 'green house', '114', 'dimakilala', 'pasong tamo', 'comporate', '1231231', '0000-00-00', 'APP-202501250001', '1737836756629544.jpg', '1737836756629544.jpg', '1737836756629544.jpg', 'Pending', NULL, 0, NULL, NULL, NULL),
+(92, 'for', 'me ', 'education', 'san diego', '1234', 'comporate', '2323213', 'james@gmail.com', 'the one ', 'green house', '114', 'dimakilala', 'pasong tamo', 'comporate', '1231231', '0000-00-00', 'APP-202501250002', '1737836795629544.jpg', '1737836795629544.jpg', '1737836795b9c47ef70bff06613d397abfce02c6e7.jpg', 'Approved', NULL, 0, NULL, 'Released', NULL),
+(93, 'for', 'me ', 'education', 'san diego', '1234', 'comporate', '2323213', 'james@gmail.com', 'the one ', 'green house', '114', 'dimakilala', 'pasong tamo', 'comporate', '1231231', '0000-00-00', 'APP-202501310001', '1738310672629544.jpg', '1738310672629544.jpg', '1738310672629544.jpg', 'Approved', NULL, 0, NULL, 'Released', NULL),
+(94, 'brian', 'like', 'tepase', 'pasong tamo', '1234', 'comporate', '09303327150', 'briantepase@gmail.com', 'the one ', 'green house', '114', 'dimakilala', 'pasong tamo', 'comporate', '1231231', '0000-00-00', 'APP-202501310002', '1738312843b9c47ef70bff06613d397abfce02c6e7.jpg', '1738312843b9c47ef70bff06613d397abfce02c6e7.jpg', '1738312843b9c47ef70bff06613d397abfce02c6e7.jpg', 'Rejected', NULL, 0, NULL, 'Needs Correction', NULL);
 
 -- --------------------------------------------------------
 
@@ -141,28 +143,31 @@ CREATE TABLE `renewal` (
   `barangay` varchar(255) NOT NULL,
   `business_type` varchar(255) DEFAULT NULL,
   `rent_per_month` varchar(255) NOT NULL,
-  `period_date` date DEFAULT NULL,
   `date_application` date NOT NULL,
-  `reciept` varchar(255) NOT NULL,
-  `or_date` date NOT NULL,
-  `amount_paid` varchar(255) NOT NULL,
+  `application_number` varchar(50) DEFAULT NULL,
   `upload_dti` varchar(255) DEFAULT NULL,
   `upload_store_picture` varchar(255) DEFAULT NULL,
   `food_security_clearance` varchar(255) DEFAULT NULL,
   `upload_old_permit` varchar(255) DEFAULT NULL,
   `document_status` varchar(50) DEFAULT 'Pending',
-  `permit_expiration` date DEFAULT NULL
+  `permit_expiration` date DEFAULT NULL,
+  `needs_resubmission` tinyint(1) DEFAULT 0,
+  `expiration_date` date DEFAULT NULL,
+  `application_status` varchar(50) DEFAULT NULL,
+  `remark` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `renewal`
 --
 
-INSERT INTO `renewal` (`id`, `fname`, `mname`, `lname`, `address`, `zip`, `business_name`, `phone`, `email`, `business_address`, `building_name`, `building_no`, `street`, `barangay`, `business_type`, `rent_per_month`, `period_date`, `date_application`, `reciept`, `or_date`, `amount_paid`, `upload_dti`, `upload_store_picture`, `food_security_clearance`, `upload_old_permit`, `document_status`, `permit_expiration`) VALUES
-(1, 'John', 'Michael', 'Badilla', 'Quezon City', '1234', 'walmart', '09876543210', 'johnmichael@gmail.com', 'Manila', 'qwer', '12', 'qwer', 'qwer', 'shabu shabu', '1500', '2024-09-22', '2024-09-22', '', '2024-09-22', '1000', NULL, NULL, NULL, NULL, 'Pending', '2025-09-22'),
-(15, 'will', 'like', 'smith', 'san francisco', '1234', 'comporate', '2323213', 'james@gmail.com', 'san diego', 'green house', '114', 'san diego', 'pasong tamo', '12321313', '1231231', '2024-10-08', '2024-10-08', 'NA', '2024-10-08', '1000', NULL, NULL, NULL, NULL, 'Pending', '2025-10-08'),
-(16, 'will', 'like', 'smith', 'san francisco', '1234', 'comporate', '2323213', 'james@gmail.com', 'san diego', 'green house', '114', 'san diego', 'pasong tamo', '12321313', '1231231', '2024-10-08', '2024-10-08', 'NA', '2024-10-08', '1000', NULL, NULL, NULL, NULL, 'Pending', '2025-10-08'),
-(26, 'me', 'me ', 'hello', 'san diego', '1234', 'comporate', '09303327150', 'james@gmail.com', 'the one ', 'green house', '114', 'dimakilala', 'pasong tamo', 'comporate', '1231231', NULL, '2024-10-17', 'REC-202410170001', '2024-10-18', '1000', '1729190869_olli-the-polite-cat.jpg', '1729190869_olli-the-polite-cat.jpg', '1729190869_olli-the-polite-cat.jpg', '1729190869_olli-the-polite-cat.jpg', 'Pending', NULL);
+INSERT INTO `renewal` (`id`, `fname`, `mname`, `lname`, `address`, `zip`, `business_name`, `phone`, `email`, `business_address`, `building_name`, `building_no`, `street`, `barangay`, `business_type`, `rent_per_month`, `date_application`, `application_number`, `upload_dti`, `upload_store_picture`, `food_security_clearance`, `upload_old_permit`, `document_status`, `permit_expiration`, `needs_resubmission`, `expiration_date`, `application_status`, `remark`) VALUES
+(1, 'John', 'Michael', 'Badilla', 'Quezon City', '1234', 'walmart', '09876543210', 'johnmichael@gmail.com', 'Manila', 'qwer', '12', 'qwer', 'qwer', 'shabu shabu', '1500', '2024-09-22', '', NULL, NULL, NULL, NULL, 'Rejected', '2025-09-22', 1, NULL, NULL, NULL),
+(26, 'me', 'me ', 'hello', 'san diego', '1234', 'comporate', '09303327150', 'james@gmail.com', 'the one ', 'green house', '114', 'dimakilala', 'pasong tamo', 'comporate', '1231231', '2024-10-17', 'REC-202410170001', '1729190869_olli-the-polite-cat.jpg', '1729190869_olli-the-polite-cat.jpg', '1729190869_olli-the-polite-cat.jpg', '1729190869_olli-the-polite-cat.jpg', 'Approved', NULL, 1, NULL, NULL, NULL),
+(27, 'brian', 'like', 'tepase', 'pasong tamo', '1234', 'comporate', '09303327150', 'briantepase@gmail.com', 'the one ', 'green house', '114', 'dimakilala', 'pasong tamo', 'comporate', '1231231', '2025-01-31', 'APP-202501310001', '1738320127_b9c47ef70bff06613d397abfce02c6e7.jpg', '1738320127_b9c47ef70bff06613d397abfce02c6e7.jpg', '1738320127_b9c47ef70bff06613d397abfce02c6e7.jpg', '1738320127_b9c47ef70bff06613d397abfce02c6e7.jpg', 'Pending', NULL, 0, NULL, NULL, NULL),
+(29, 'HGJGJGH', 'me ', 'education', 'san diego', '1234', 'comporate', '2323213', 'james@gmail.com', 'the one ', 'green house', '114', 'dimakilala', 'pasong tamo', 'comporate', '1231231', '2025-01-31', 'APP-202501310003', '1738322740_images.jpg', '1738322740_images.jpg', '1738322740_images.jpg', '1738322740_images.jpg', 'Approved', NULL, 0, NULL, 'Released', NULL),
+(30, '213131', 'me ', 'education', 'san diego', '1234', 'comporate', '2323213', 'james@gmail.com', 'the one ', 'green house', '114', 'dimakilala', 'pasong tamo', 'comporate', '1231231', '2025-01-31', 'APP-202501310004', '1738323437_olli-the-polite-cat.jpg', '1738323437_olli-the-polite-cat.jpg', '1738323437_olli-the-polite-cat.jpg', '1738323437_olli-the-polite-cat.jpg', 'Rejected', NULL, 0, NULL, 'Needs Correction', NULL),
+(31, '213131', 'me ', 'education', 'san diego', '1234', 'comporate', '2323213', 'james@gmail.com', 'the one ', 'green house', '114', 'dimakilala', 'pasong tamo', 'comporate', '1231231', '2025-01-31', 'APP-202501310005', '1738323489_olli-the-polite-cat.jpg', '1738323489_olli-the-polite-cat.jpg', '1738323489_olli-the-polite-cat.jpg', '1738323489_olli-the-polite-cat.jpg', 'Approved', NULL, 0, NULL, 'Released', NULL);
 
 -- --------------------------------------------------------
 
@@ -190,10 +195,7 @@ CREATE TABLE `users` (
 INSERT INTO `users` (`id`, `fname`, `lname`, `email`, `phone`, `address`, `password`, `role_as`, `status`, `created_at`) VALUES
 (1, 'System', 'Administrator', 'admin@mail.com', '', '', '$2y$10$Ro2u.oJHlAxyHUkvBLgvFuh015othrcwZGxN2sMEZEfKhPnqK5GHW', 2, 0, '2024-09-15 02:57:13'),
 (18, 'Ed', 'Fernandez', 'ed@mail.com', '09246897531', 'tanza', '$2y$10$Bmk0b9RM28rEXj8nIBwhWeGpqt2k0TO9ZkZ/PXVXOXc9BBHP1oL7.', 0, 0, '2024-09-22 09:18:50'),
-(30, 'demo', 'demo', 'demo@gmail.com', '', '', '$2y$10$DLHXAew2rpzDd5DKcj7Nu..7Af4Hyawic7VGc47e1mPBDtxOalszu', 0, 0, '2024-10-04 18:13:37'),
-(32, 'rick brian', 'te', 'foreducation48@gmail.com', '0213123123', 'san diego', '$2y$10$ttY5qRB0usP8HRtpiT.N3uaP4x1LLweHho9K56iWxiy39PfTW4joG', 0, 0, '2024-10-08 14:29:10'),
-(33, 'brian', 'tepase', 'briantepase@gmail.com', '09303327150', 'pasong tamo', '$2y$10$w9A29u1sxnma58A2Y9kGyOayt2B.IqQqDM0YfB7nmCS.Wcy..gIMK', 0, 0, '2024-10-10 16:57:00'),
-(34, 'Demon', 'slayer', 'demonslayer@gmail.com', '123123213', 'pasong tamo', '$2y$10$aR4crLzF1KVcQZTGY.mVAOjsfn.dFo1OqPTG7megbRMX5NYHRL5Di', 0, 0, '2024-10-17 14:46:18');
+(36, 'for', 'education', 'foreducation49@gmail.com', '09103045611', 'pasong tamo', '$2y$10$ZIvV3BHLj66l9JpaL4kmPeYQGb1FIXIi92YeImR/pYGFS7I/lwUUK', 0, 0, '2024-10-27 07:45:11');
 
 --
 -- Indexes for dumped tables
@@ -249,19 +251,19 @@ ALTER TABLE `employee`
 -- AUTO_INCREMENT for table `registration`
 --
 ALTER TABLE `registration`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=86;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=97;
 
 --
 -- AUTO_INCREMENT for table `renewal`
 --
 ALTER TABLE `renewal`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

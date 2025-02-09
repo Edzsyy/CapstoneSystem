@@ -202,10 +202,6 @@ if (isset($_REQUEST['submit'])) {
                     <label for="rent_per_month" class="form-label">Rent Per Month:</label>
                     <input type="text" class="form-control" id="rent_per_month" name="rent_per_month" placeholder="Rent Per Month" required>
                 </div>
-                <div class="col-md-4">
-                    <label for="period_date" class="form-label">Period Date (Optional):</label>
-                    <input type="date" class="form-control" id="period_date" name="period_date">
-                </div>
                 <hr>
                 <h5 style="text-align: center;">Upload Required Documents</h5>
                 <div class="col-md-4">

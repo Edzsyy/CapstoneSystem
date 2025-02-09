@@ -76,3 +76,27 @@ POST Data: Array
     [document_status] => Approved
 )
 
+POST Data: Array
+(
+    [viewid] => 31
+    [document_status] => Approved
+)
+
+POST Data: Array
+(
+    [viewid] => 31
+    [document_status] => Approved
+)
+
+POST Data: Array
+(
+    [viewid] => 91
+    [document_status] => Approved
+)
+
+POST Data: Array
+(
+    [viewid] => 27
+    [document_status] => Approved
+)
+

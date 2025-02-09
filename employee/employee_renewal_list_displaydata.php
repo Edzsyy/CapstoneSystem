@@ -2,7 +2,7 @@
 include('../employee/assets/config/dbconn.php');
 
 $status = $_POST['displaysend'] ?? 'All';
-$query = "SELECT email, business_name, business_address, business_type, period_date, date_application, id, document_status FROM renewal";
+$query = "SELECT email, business_name, business_address, business_type, application_status, document_status, date_application, id FROM renewal"; 
 
 if ($status !== 'All') {
     $query .= " WHERE document_status = '" . mysqli_real_escape_string($conn, $status) . "'";
@@ -18,9 +18,9 @@ if (mysqli_num_rows($result) > 0) {
                 <th>Business Name</th>
                 <th>Business Address</th>
                 <th>Business Type</th>
-                <th>Period Date</th>
-                <th>Document Status</th>
                 <th>Date of Application</th>
+                <th>Document Status</th>
+                <th>Application Status</th>
                 <th>Actions</th>
             </tr>
           </thead>';
@@ -32,9 +32,9 @@ if (mysqli_num_rows($result) > 0) {
                 <td>' . $row['business_name'] . '</td>
                 <td>' . $row['business_address'] . '</td>
                 <td>' . $row['business_type'] . '</td>
-                <td>' . $row['period_date'] . '</td>
-                <td>' . $row['document_status'] . '</td>
                 <td>' . $row['date_application'] . '</td>
+                <td>' . $row['application_status'] . '</td>
+                <td>' . $row['document_status'] . '</td>
                 
                 <td>
                     <div class="dropdown">
