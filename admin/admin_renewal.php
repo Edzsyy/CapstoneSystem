@@ -1,4 +1,7 @@
 <?php
+// Start output buffering
+ob_start();
+
 // Enable error reporting and logging
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
@@ -130,6 +133,8 @@ if (isset($_REQUEST['submit'])) {
             }
         }
     }
+            // End output buffering
+ob_end_flush();
 }
 ?>
 

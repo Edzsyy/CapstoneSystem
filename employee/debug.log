@@ -387,3 +387,9 @@ POST Data: Array
     [document_status] => Approved
 )
 
+POST Data: Array
+(
+    [viewid] => 99
+    [document_status] => Approved
+)
+

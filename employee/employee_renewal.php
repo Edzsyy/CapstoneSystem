@@ -64,7 +64,6 @@ if (isset($_REQUEST['submit'])) {
         'barangay' => mysqli_real_escape_string($conn, $_POST['barangay']),
         'business_type' => mysqli_real_escape_string($conn, $_POST['business_type']),
         'rent_per_month' => mysqli_real_escape_string($conn, $_POST['rent_per_month']),
-        'period_date' => !empty($_POST['period_date']) ? mysqli_real_escape_string($conn, $_POST['period_date']) : NULL,
         'date_application' => mysqli_real_escape_string($conn, $_POST['date_application']),
     ];
 
@@ -100,14 +99,11 @@ if (isset($_REQUEST['submit'])) {
 
     // Proceed with database insertion if no error occurred
     if (empty($errorMessage)) {
-        // Set document_status to "Pending"
-        $document_status = "Pending";
-
         $sql = "INSERT INTO renewal (fname, mname, lname, address, zip, business_name, phone, email, business_address, 
-                building_name, building_no, street, barangay, business_type, rent_per_month, period_date, 
-                date_application, application_number, document_status, upload_dti, upload_store_picture, 
+                building_name, building_no, street, barangay, business_type, rent_per_month, 
+                date_application, application_number, upload_dti, upload_store_picture, 
                 food_security_clearance, upload_old_permit) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         $stmt = $conn->prepare($sql);
         if ($stmt === false) {
@@ -120,15 +116,13 @@ if (isset($_REQUEST['submit'])) {
             $upload_old_permit = $uploadedFiles['upload_old_permit'] ?? NULL;
 
             // Bind parameters
-            $stmt->bind_param(
-                "sssssssssssssssssssssss",
-                $formData['fname'], $formData['mname'], $formData['lname'], $formData['address'], $formData['zip'],
-                $formData['business_name'], $formData['phone'], $formData['email'], $formData['business_address'],
-                $formData['building_name'], $formData['building_no'], $formData['street'], $formData['barangay'],
-                $formData['business_type'], $formData['rent_per_month'], $formData['period_date'],
-                $formData['date_application'], $applicationNumber, $document_status, $upload_dti, $upload_store_picture,
-                $food_security_clearance, $upload_old_permit
-            );
+            $stmt->bind_param("sssssssssssssssssssss", 
+                $formData['fname'], $formData['mname'], $formData['lname'], $formData['address'], $formData['zip'], 
+                $formData['business_name'], $formData['phone'], $formData['email'], $formData['business_address'], 
+                $formData['building_name'], $formData['building_no'], $formData['street'], $formData['barangay'], 
+                $formData['business_type'], $formData['rent_per_month'], 
+                $formData['date_application'], $applicationNumber, $upload_dti, $upload_store_picture, 
+                $food_security_clearance, $upload_old_permit);
 
             if ($stmt->execute()) {
                 $successMessage = "Renewal registration successful!";
@@ -139,7 +133,7 @@ if (isset($_REQUEST['submit'])) {
             }
         }
     }
-    // End output buffering
+            // End output buffering
 ob_end_flush();
 }
 ?>
@@ -227,10 +221,6 @@ ob_end_flush();
                             <label for="rent_per_month" class="form-label">Rent Per Month:</label>
                             <input type="text" class="form-control" id="rent_per_month" name="rent_per_month" placeholder="Rent Per Month" required>
                         </div>
-                        <div class="col-md-4">
-                            <label for="period_date" class="form-label">Period Date (Optional):</label>
-                            <input type="date" class="form-control" id="period_date" name="period_date">
-                        </div>
                         <hr>
                         <h5 style="text-align: center;">Upload Required Documents</h5>
                         <div class="col-md-6">
@@ -271,6 +261,6 @@ ob_end_flush();
 // Include footer and scripts
 include('../employee/assets/inc/footer.php');
 ?>
- 
+
 </body>
 </html>
