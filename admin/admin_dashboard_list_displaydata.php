@@ -3,10 +3,10 @@ include('../admin/assets/config/dbconn.php');
 
 // Fetch data from both registration and renewal tables
 $query = "
-    SELECT email, business_name, business_address, business_type, period_date, date_application, id 
+    SELECT email, business_name, business_address, business_type, application_status, date_application, id 
     FROM registration 
     UNION ALL 
-    SELECT email, business_name, business_address, business_type, period_date, date_application, id 
+    SELECT email, business_name, business_address, business_type, application_status, date_application, id 
     FROM renewal
 "; 
 
@@ -20,7 +20,7 @@ if (mysqli_num_rows($result) > 0) {
                 <th>Business Name</th>
                 <th>Business Address</th>
                 <th>Business Type</th>
-                <th>Period Date</th>
+                <th>Application Status</th>
                 <th>Date of Application</th>
                 <th>Actions</th>
             </tr>
@@ -33,7 +33,7 @@ if (mysqli_num_rows($result) > 0) {
                 <td>' . htmlspecialchars($row['business_name']) . '</td>
                 <td>' . htmlspecialchars($row['business_address']) . '</td>
                 <td>' . htmlspecialchars($row['business_type']) . '</td>
-                <td>' . htmlspecialchars($row['period_date']) . '</td>
+                <td>' . htmlspecialchars($row['application_status']) . '</td>
                 <td>' . htmlspecialchars($row['date_application']) . '</td>
                 <td>
                     <div class="dropdown">
