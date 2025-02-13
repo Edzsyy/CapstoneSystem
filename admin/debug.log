@@ -100,3 +100,33 @@ POST Data: Array
     [document_status] => Approved
 )
 
+POST Data: Array
+(
+    [viewid] => 101
+    [document_status] => Approved
+)
+
+POST Data: Array
+(
+    [viewid] => 101
+    [application_status] => Released
+)
+
+POST Data: Array
+(
+    [viewid] => 45
+    [document_status] => Rejected
+)
+
+POST Data: Array
+(
+    [viewid] => 45
+    [document_status] => Approved
+)
+
+POST Data: Array
+(
+    [viewid] => 45
+    [application_status] => Released
+)
+

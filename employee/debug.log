@@ -393,3 +393,387 @@ POST Data: Array
     [document_status] => Approved
 )
 
+POST Data: Array
+(
+    [viewid] => 39
+    [document_status] => Rejected
+)
+
+POST Data: Array
+(
+    [viewid] => 101
+    [document_status] => Approved
+)
+
+POST Data: Array
+(
+    [viewid] => 39
+    [document_status] => Rejected
+)
+
+POST Data: Array
+(
+    [viewid] => 26
+    [document_status] => Approved
+)
+
+POST Data: Array
+(
+    [viewid] => 39
+    [document_status] => Approved
+)
+
+POST Data: Array
+(
+    [viewid] => 30
+    [document_status] => Approved
+)
+
+POST Data: Array
+(
+    [viewid] => 39
+    [document_status] => Released
+)
+
+POST Data: Array
+(
+    [viewid] => 39
+    [document_status] => Rejected
+)
+
+POST Data: Array
+(
+    [viewid] => 31
+    [document_status] => Rejected
+)
+
+POST Data: Array
+(
+    [viewid] => 39
+    [document_status] => Approved
+)
+
+POST Data: Array
+(
+    [viewid] => 31
+    [document_status] => Approved
+)
+
+POST Data: Array
+(
+    [viewid] => 27
+    [document_status] => Rejected
+)
+
+POST Data: Array
+(
+    [viewid] => 39
+    [document_status] => Approved
+)
+
+POST Data: Array
+(
+    [viewid] => 27
+    [document_status] => Rejected
+)
+
+POST Data: Array
+(
+    [viewid] => 39
+    [document_status] => Rejected
+)
+
+POST Data: Array
+(
+    [viewid] => 39
+    [document_status] => Approved
+)
+
+POST Data: Array
+(
+    [viewid] => 40
+    [document_status] => Approved
+)
+
+POST Data: Array
+(
+    [viewid] => 41
+    [document_status] => Approved
+)
+
+POST Data: Array
+(
+    [viewid] => 41
+    [document_status] => Rejected
+)
+
+POST Data: Array
+(
+    [viewid] => 41
+    [document_status] => Approved
+)
+
+POST Data: Array
+(
+    [viewid] => 41
+    [document_status] => Released
+)
+
+POST Data: Array
+(
+    [viewid] => 42
+    [document_status] => Approved
+)
+
+POST Data: Array
+(
+    [viewid] => 42
+    [document_status] => Released
+)
+
+POST Data: Array
+(
+    [viewid] => 43
+    [document_status] => Approved
+)
+
+POST Data: Array
+(
+    [viewid] => 43
+    [application_status] => Released
+)
+
+POST Data: Array
+(
+    [viewid] => 43
+    [application_status] => Released
+)
+
+POST Data: Array
+(
+    [viewid] => 43
+    [application_status] => Released
+)
+
+POST Data: Array
+(
+    [viewid] => 43
+    [application_status] => Released
+)
+
+POST Data: Array
+(
+    [viewid] => 43
+    [application_status] => Released
+)
+
+POST Data: Array
+(
+    [viewid] => 43
+    [application_status] => Released
+)
+
+POST Data: Array
+(
+)
+
+POST Data: Array
+(
+    [viewid] => 43
+    [application_status] => Released
+)
+
+POST Data: Array
+(
+    [viewid] => 43
+    [application_status] => Released
+)
+
+POST Data: Array
+(
+    [viewid] => 44
+    [document_status] => Approved
+)
+
+POST Data: Array
+(
+    [viewid] => 44
+    [document_status] => Approved
+)
+
+POST Data: Array
+(
+    [viewid] => 44
+    [document_status] => Approved
+)
+
+POST Data: Array
+(
+    [viewid] => 44
+    [document_status] => Approved
+)
+
+POST Data: Array
+(
+)
+
+POST Data: Array
+(
+)
+
+POST Data: Array
+(
+)
+
+POST Data: Array
+(
+)
+
+POST Data: Array
+(
+    [viewid] => 44
+    [document_status] => Approved
+)
+
+POST Data: Array
+(
+    [viewid] => 44
+    [document_status] => Approved
+)
+
+POST Data: Array
+(
+    [viewid] => 44
+    [application_status] => Released
+)
+
+POST Data: Array
+(
+    [viewid] => 44
+    [application_status] => Released
+)
+
+POST Data: Array
+(
+)
+
+POST Data: Array
+(
+    [viewid] => 44
+    [application_status] => Released
+)
+
+POST Data: Array
+(
+    [viewid] => 45
+    [document_status] => Approved
+)
+
+POST Data: Array
+(
+    [viewid] => 45
+    [application_status] => Released
+)
+
+POST Data: Array
+(
+    [viewid] => 45
+    [application_status] => Released
+)
+
+POST Data: Array
+(
+    [viewid] => 45
+    [document_status] => Rejected
+)
+
+POST Data: Array
+(
+    [viewid] => 45
+    [document_status] => Approved
+)
+
+POST Data: Array
+(
+    [viewid] => 45
+    [application_status] => Released
+)
+
+POST Data: Array
+(
+    [viewid] => 45
+    [document_status] => Approved
+)
+
+POST Data: Array
+(
+    [viewid] => 45
+    [application_status] => Released
+)
+
+POST Data: Array
+(
+    [viewid] => 45
+    [application_status] => Released
+)
+
+POST Data: Array
+(
+    [viewid] => 44
+    [application_status] => Released
+)
+
+POST Data: Array
+(
+    [viewid] => 45
+    [document_status] => Rejected
+)
+
+POST Data: Array
+(
+    [viewid] => 100
+    [document_status] => Approved
+)
+
+POST Data: Array
+(
+    [viewid] => 100
+    [application_status] => Released
+)
+
+POST Data: Array
+(
+    [viewid] => 98
+    [document_status] => Approved
+)
+
+POST Data: Array
+(
+    [viewid] => 98
+    [application_status] => Released
+)
+
+POST Data: Array
+(
+    [viewid] => 101
+    [document_status] => Rejected
+)
+
+POST Data: Array
+(
+    [viewid] => 101
+    [document_status] => Rejected
+)
+
+POST Data: Array
+(
+    [viewid] => 45
+    [document_status] => Approved
+)
+
+POST Data: Array
+(
+    [viewid] => 45
+    [application_status] => Released
+)
+

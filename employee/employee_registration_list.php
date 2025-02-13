@@ -234,8 +234,9 @@ include('../employee/assets/inc/navbar.php');
                 </div>
                 <input type="hidden" id="hiddendata" value="">
                 <div class="modal-footer">
-                <button class="btn btn-success update-status-btn" data-status="Approved">Approve</button>
-                <button class="btn btn-danger update-status-btn" data-status="Rejected">Reject</button>
+                <button type="button" class="btn btn-success" onclick="updateDocumentStatus('Approved')">Approve</button>
+                <button type="button" class="btn btn-danger" onclick="updateDocumentStatus('Rejected')">Notify</button>
+                <button type="button" class="btn btn-primary" id="releaseButton" onclick="releaseApplication()" disabled>Released</button>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
@@ -407,7 +408,7 @@ include('../employee/assets/inc/footer.php');
     }
 
     // view function for displaying user details including image files
-    function viewDetails(viewid) {
+        function viewDetails(viewid) {
         $.post("employee_registration_list_view.php", { viewid: viewid }, function(data, status) {
             var user = JSON.parse(data);
 
@@ -416,12 +417,11 @@ include('../employee/assets/inc/footer.php');
                 return;
             }
 
+            console.log("Document Status:", user.document_status); // Debugging
 
-            // Set the hidden input value to the viewId
-             $('#hiddendata').val(viewid)
+            $('#hiddendata').val(viewid);
 
-           // Populate the modal fields with the fetched data
-           $('#viewFirstname').text(user.fname);
+            $('#viewFirstname').text(user.fname);
             $('#viewMiddlename').text(user.mname);
             $('#viewLastname').text(user.lname);
             $('#viewEmail').text(user.email);
@@ -439,6 +439,13 @@ include('../employee/assets/inc/footer.php');
             $('#viewDateofApplication').text(user.date_application);
             $('#viewapplication_number').text(user.application_number);
             $('#viewDocumentStatus').text(user.document_status);
+
+            // Enable/Show the "Released" button if status is "Approved" or "Pending Release"
+            if (user.document_status === 'Approved' || user.document_status === 'Pending Release') {
+                $('#releaseButton').prop('disabled', false).show(); // Enable and show the button
+            } else {
+                $('#releaseButton').prop('disabled', true).hide(); // Disable and hide the button
+            }
 
             // Handle image files
             const storePicture = user.store_picture_url ? '/user/assets/image/' + user.store_picture_url : 'default_store_picture.jpg';
@@ -472,42 +479,88 @@ include('../employee/assets/inc/footer.php');
     }
 
   
-   // Function to update document status and handle application status
-    function updateDocumentStatus(viewid, newStatus) {
-        $.ajax({
-            url: "employee_registration_list_update_status.php",  // Ensure this matches your PHP file
-            type: "POST",
-            data: {
-                viewid: viewid,
-                document_status: newStatus
-            },
-            dataType: "json",
-            success: function(response) {
-                if (response.success) {
-                    alert("Status updated successfully!");
+     // Function to show the image in a larger modal
+     function showImageInModal(imageUrl) {
+            $('#imagePreview').attr('src', imageUrl);
+            $('#imageViewModal').modal('show');
+        }
 
-                    // Update the displayed status dynamically
-                    $('#viewDocumentStatus').text(newStatus);
+        // Function to update the document status
+            function updateDocumentStatus(status) {
+            var viewId = $('#hiddendata').val(); // Get the hidden view ID
 
-                    // If approved or rejected, update the application status display
-                    if (newStatus === 'Rejected') {
-                        $('#viewApplicationStatus').text('Needs Correction');
-                    } else if (newStatus === 'Approved') {
-                        $('#viewApplicationStatus').text('Released');
-                    }
-
-                    // Hide the modal after updating
-                    $('#viewModal').modal('hide');
-                } else {
-                    alert("Error: " + response.error);
-                }
-            },
-            error: function(xhr, status, error) {
-                console.error("AJAX Error:", status, error);
-                alert("An error occurred while updating. Please try again.");
+            if (!viewId || !status) {
+            alert("View ID or Document Status is missing.");
+            return;
             }
+
+            $.post("employee_registration_list_update_status.php", 
+            {
+            viewid: viewId,
+            document_status: status
+            }, 
+        function(data) {
+            console.log("Response:", data);
+            if (data.success) {
+                $('#viewDocumentStatus').text(status);
+                alert("Document status updated to " + status);
+                $('#viewModal').modal('hide');
+                filterData('All'); // Refresh the list
+
+                if (status === 'Rejected') {
+                    alert("Your document was rejected. Please refill the renewal update form.");
+                } else if (status === 'Approved') {
+                    $('#releaseButton').show(); // Show the release button only after approval
+                    alert("Application has been approved. You can now release it.");
+                }
+            } else {
+                alert("Failed to update the document status: " + data.error);
+            }
+        }, "json")
+        .fail(function(jqXHR, textStatus, errorThrown) {
+            console.error("AJAX request failed: " + textStatus + ", " + errorThrown);
+            alert("AJAX request failed: " + textStatus);
         });
     }
+
+
+   // Function to release the application
+   function releaseApplication() {
+            var viewId = $('#hiddendata').val(); // Get the hidden view ID
+
+            if (!viewId) {
+                alert("View ID is missing.");
+                return;
+            }
+
+            // Disable the button to prevent multiple clicks
+            $('#releaseButton').prop('disabled', true);
+
+            // Update only application_status to "Released"
+            $.post("employee_registration_list_update_status.php", 
+            {
+                viewid: viewId,
+                application_status: 'Released'  // Ensure only application_status is updated
+            }, 
+            function(data) {
+                console.log("Response:", data);
+                if (data.success) {
+                    $('#viewApplicationStatus').text('Released'); // Update application status in UI
+                    alert("Application has been successfully released.");
+                    $('#releaseButton').hide(); // Hide the button after releasing
+                    $('#viewModal').modal('hide'); // Close the modal
+                    filterData('All'); // Refresh the table
+                } else {
+                    alert("Failed to release the application: " + data.error);
+                    $('#releaseButton').prop('disabled', false); // Re-enable the button
+                }
+            }, "json")
+            .fail(function(jqXHR, textStatus, errorThrown) {
+                console.error("AJAX request failed: " + textStatus + ", " + errorThrown);
+                alert("AJAX request failed: " + textStatus);
+                $('#releaseButton').prop('disabled', false); // Re-enable the button
+            });
+        }
 
     // Event listener for updating document status
     $(document).on('click', '.update-status-btn', function() {

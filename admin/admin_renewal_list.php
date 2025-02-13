@@ -255,7 +255,8 @@ include('../admin/assets/inc/navbar.php');
             <input type="hidden" id="hiddendata" value="">
             <div class="modal-footer">
                 <button type="button" class="btn btn-success" onclick="updateDocumentStatus('Approved')">Approve</button>
-                <button type="button" class="btn btn-danger" onclick="updateDocumentStatus('Rejected')">Reject</button>
+                <button type="button" class="btn btn-danger" onclick="updateDocumentStatus('Rejected')">Notify</button>
+                <button type="button" class="btn btn-primary" id="releaseButton" onclick="releaseApplication()" disabled>Released</button>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
@@ -443,101 +444,106 @@ include('../admin/assets/inc/footer.php');
     
     // view function for displaying user details including image files
     function viewDetails(viewid) {
-        $.post("admin_renewal_list_view.php", { viewid: viewid }, function(data, status) {
-            var user = JSON.parse(data);
+    $.post("admin_renewal_list_view.php", { viewid: viewid }, function(data, status) {
+        var user = JSON.parse(data);
 
-            if (user.error) {
-                alert(user.error);
-                return;
-            }
-
-            // Set the hidden input value to the viewId
-            $('#hiddendata').val(viewid)
-
-           // Populate the modal fields with the fetched data
-           $('#viewFirstname').text(user.fname);
-            $('#viewMiddlename').text(user.mname);
-            $('#viewLastname').text(user.lname);
-            $('#viewEmail').text(user.email);
-            $('#viewPhone').text(user.phone);
-            $('#viewAddress').text(user.address);
-            $('#viewZip').text(user.zipcode);
-            $('#viewBusinessName').text(user.business_name);
-            $('#viewBusinessAddress').text(user.business_address);
-            $('#viewBuildingName').text(user.building_name);
-            $('#viewBuildingNo').text(user.building_no);
-            $('#viewStreet').text(user.street);
-            $('#viewBarangay').text(user.barangay);
-            $('#viewBusinessType').text(user.business_type);
-            $('#viewRentPerMonth').text(user.rent_per_month);
-            $('#viewDateofApplication').text(user.date_application);
-            $('#viewapplication_number').text(user.application_number);
-            $('#viewDocumentStatus').text(user.document_status);
-
-            // Handle image files
-            const storePicture = user.store_picture_url ? '/user/assets/image/' + user.store_picture_url : 'default_store_picture.jpg';
-            const foodSecurityClearance = user.food_security_clearance_url ? '/user/assets/image/' + user.food_security_clearance_url : 'default_food_security.jpg';
-            const uploadDti = user.upload_dti_url ? '/user/assets/image/' + user.upload_dti_url : 'default_dti.jpg';
-            const uploadOldPermit = user.upload_old_permit_url ? '/user/assets/image/' + user.upload_old_permit_url : 'default_upload_old_permit.jpg'; // Fixed variable name
-
-            $('#viewStorePicture').attr('src', storePicture);
-            $('#viewFoodSecurityClearance').attr('src', foodSecurityClearance);
-            $('#viewUploadDti').attr('src', uploadDti);
-            $('#viewUploadOldPermit').attr('src', uploadOldPermit); // Fixed variable name
-
-            // Add click events to open the image modal for viewing full size
-            $('#viewStorePicture').on('click', function() {
-                showImageInModal(storePicture);
-            });
-            $('#viewFoodSecurityClearance').on('click', function() {
-                showImageInModal(foodSecurityClearance);
-            });
-            $('#viewUploadDti').on('click', function() {
-                showImageInModal(uploadDti);
-            });
-            $('#viewUploadOldPermit').on('click', function() { // Fixed variable name
-                showImageInModal(uploadOldPermit);
-            });
-
-            // Show the modal
-            $('#viewModal').modal('show');
-        });
-    }
-
-    // Function to show the image in a larger modal
-    function updateDocumentStatus(status) {
-        var viewId = $('#hiddendata').val(); // Ensure this input exists and has a value
-
-        console.log("View ID:", viewId);
-        console.log("Document Status:", status);
-
-        if (!viewId || !status) {
-            alert("View ID or Document Status is missing.");
+        if (user.error) {
+            alert(user.error);
             return;
         }
 
-        $.post("admin_renewal_list_update_status.php", {
+        console.log("Document Status:", user.document_status); // Debugging
+
+        $('#hiddendata').val(viewid);
+
+        $('#viewFirstname').text(user.fname);
+        $('#viewMiddlename').text(user.mname);
+        $('#viewLastname').text(user.lname);
+        $('#viewEmail').text(user.email);
+        $('#viewPhone').text(user.phone);
+        $('#viewAddress').text(user.address);
+        $('#viewZip').text(user.zipcode);
+        $('#viewBusinessName').text(user.business_name);
+        $('#viewBusinessAddress').text(user.business_address);
+        $('#viewBuildingName').text(user.building_name);
+        $('#viewBuildingNo').text(user.building_no);
+        $('#viewStreet').text(user.street);
+        $('#viewBarangay').text(user.barangay);
+        $('#viewBusinessType').text(user.business_type);
+        $('#viewRentPerMonth').text(user.rent_per_month);
+        $('#viewDateofApplication').text(user.date_application);
+        $('#viewapplication_number').text(user.application_number);
+        $('#viewDocumentStatus').text(user.document_status);
+
+        // Enable/Show the "Released" button if status is "Approved" or "Pending Release"
+        if (user.document_status === 'Approved' || user.document_status === 'Pending Release') {
+            $('#releaseButton').prop('disabled', false).show(); // Enable and show the button
+        } else {
+            $('#releaseButton').prop('disabled', true).hide(); // Disable and hide the button
+        }
+
+        // Handle images
+        const storePicture = user.store_picture_url ? '/user/assets/image/' + user.store_picture_url : 'default_store_picture.jpg';
+        const foodSecurityClearance = user.food_security_clearance_url ? '/user/assets/image/' + user.food_security_clearance_url : 'default_food_security.jpg';
+        const uploadDti = user.upload_dti_url ? '/user/assets/image/' + user.upload_dti_url : 'default_dti.jpg';
+        const uploadOldPermit = user.upload_old_permit_url ? '/user/assets/image/' + user.upload_old_permit_url : 'default_upload_old_permit.jpg';
+
+        $('#viewStorePicture').attr('src', storePicture);
+        $('#viewFoodSecurityClearance').attr('src', foodSecurityClearance);
+        $('#viewUploadDti').attr('src', uploadDti);
+        $('#viewUploadOldPermit').attr('src', uploadOldPermit);
+
+        $('#viewStorePicture').on('click', function() {
+            showImageInModal(storePicture);
+        });
+        $('#viewFoodSecurityClearance').on('click', function() {
+            showImageInModal(foodSecurityClearance);
+        });
+        $('#viewUploadDti').on('click', function() {
+            showImageInModal(uploadDti);
+        });
+        $('#viewUploadOldPermit').on('click', function() {
+            showImageInModal(uploadOldPermit);
+        });
+
+        $('#viewModal').modal('show');
+    });
+}
+
+    // Function to show the image in a larger modal
+    function showImageInModal(imageUrl) {
+            $('#imagePreview').attr('src', imageUrl);
+            $('#imageViewModal').modal('show');
+        }
+
+    // Function to update the document status
+    function updateDocumentStatus(status) {
+            var viewId = $('#hiddendata').val(); // Get the hidden view ID
+
+            if (!viewId || !status) {
+            alert("View ID or Document Status is missing.");
+            return;
+            }
+
+            $.post("admin_renewal_list_update_status.php", 
+            {
             viewid: viewId,
             document_status: status
-        }, function(data) {
+            }, 
+        function(data) {
             console.log("Response:", data);
-
             if (data.success) {
                 $('#viewDocumentStatus').text(status);
                 alert("Document status updated to " + status);
-
-                // Additional action for approved status
-                if (status === 'Approved') {
-                    alert("Document has been approved and marked as 'Released'.");
-                }
-
-                // Additional action for rejected status
-                if (status === 'Rejected') {
-                    alert("Document has been rejected. Application status updated to 'Needs Correction'. The user needs to resubmit.");
-                }
-
                 $('#viewModal').modal('hide');
-                displayData(); // Refresh the list
+                filterData('All'); // Refresh the list
+
+                if (status === 'Rejected') {
+                    alert("Your document was rejected. Please refill the renewal update form.");
+                } else if (status === 'Approved') {
+                    $('#releaseButton').show(); // Show the release button only after approval
+                    alert("Application has been approved. You can now release it.");
+                }
             } else {
                 alert("Failed to update the document status: " + data.error);
             }
@@ -547,6 +553,46 @@ include('../admin/assets/inc/footer.php');
             alert("AJAX request failed: " + textStatus);
         });
     }
+
+
+   // Function to release the application
+        function releaseApplication() {
+            var viewId = $('#hiddendata').val(); // Get the hidden view ID
+
+            if (!viewId) {
+                alert("View ID is missing.");
+                return;
+            }
+
+            // Disable the button to prevent multiple clicks
+            $('#releaseButton').prop('disabled', true);
+
+            // Update only application_status to "Released"
+            $.post("admin_renewal_list_update_status.php", 
+            {
+                viewid: viewId,
+                application_status: 'Released'  // Ensure only application_status is updated
+            }, 
+            function(data) {
+                console.log("Response:", data);
+                if (data.success) {
+                    $('#viewApplicationStatus').text('Released'); // Update application status in UI
+                    alert("Application has been successfully released.");
+                    $('#releaseButton').hide(); // Hide the button after releasing
+                    $('#viewModal').modal('hide'); // Close the modal
+                    filterData('All'); // Refresh the table
+                } else {
+                    alert("Failed to release the application: " + data.error);
+                    $('#releaseButton').prop('disabled', false); // Re-enable the button
+                }
+            }, "json")
+            .fail(function(jqXHR, textStatus, errorThrown) {
+                console.error("AJAX request failed: " + textStatus + ", " + errorThrown);
+                alert("AJAX request failed: " + textStatus);
+                $('#releaseButton').prop('disabled', false); // Re-enable the button
+            });
+        }
+        
 
 </script>
 
