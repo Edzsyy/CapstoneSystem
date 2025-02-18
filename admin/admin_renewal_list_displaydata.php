@@ -48,6 +48,7 @@ if (mysqli_num_rows($result) > 0) {
                             <li><a class="dropdown-item" href="#" onclick="viewDetails(' . $row['id'] . ')">View</a></li>
                             <li><a class="dropdown-item" href="#" onclick="getdetails(' . $row['id'] . ')">Update</a></li>
                             <li><a class="dropdown-item" href="#" onclick="deleteuser(' . $row['id'] . ')">Delete</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="sendEmail(' . $row['id'] . ')">Send email</a></li>
                         </ul>
                     </div>
                 </td>

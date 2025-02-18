@@ -10,34 +10,113 @@ include('../admin/assets/inc/navbar.php');
 ?> 
 
 
-<!-- QR code Modal -->
+<!-- QR code Scanner Modal -->
 <div class="modal fade" id="qrcodeModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">QR Code</h1>
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content rounded-4 shadow">
+            <div class="modal-header border-0">
+                <h1 class="modal-title fs-4 fw-bold" id="exampleModalLabel">Scan QR Code</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body p-4">
                 <script src="../admin/assets/js/html5-qrcode.min.js"></script>
                 <style>
-                    .result { background-color: green; color: #fff; padding: 20px; }
-                    .row { display: flex; }
-                    table { width: 100%; border-collapse: collapse; }
-                    th, td { padding: 10px; border: 1px solid #ddd; }
+                    .result {
+
+                        color: #007bff;
+                        padding: 15px;
+                        border-radius: 8px;
+                        font-weight: bold;
+                    }
+
+                    .row {
+                        display: flex;
+                        gap: 20px;
+                    }
+
+                    .col {
+                        flex: 1;
+                    }
+
+                    #reader {
+                        border-radius: 10px;
+                        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+                        overflow: hidden;
+                    }
+
+                    h4 {
+                        font-size: 1.25rem;
+                        margin-bottom: 10px;
+                    }
+
+                    #result {
+                        font-size: 1rem;
+                        padding: 15px;
+                        background-color: #f5f5f5;
+                        border-radius: 8px;
+                        border: 1px solid #ddd;
+                        margin-top: 10px;
+                        word-wrap: break-word;
+                    }
+
+                    table {
+                        width: 100%;
+                        border-collapse: collapse;
+                        margin-top: 15px;
+                    }
+
+                    th,
+                    td {
+                        padding: 12px;
+                        text-align: left;
+                    }
+
+                    th {
+                        background-color: #f1f1f1;
+                        font-weight: bold;
+                    }
+
+                    td {
+                        background-color: #fff;
+                    }
+
+                    .modal-footer {
+                        border-top: 1px solid #ddd;
+                    }
+
+                    .btn-primary {
+                        background-color: #007bff;
+                        border-color: #007bff;
+                    }
+
+                    .btn-primary:hover {
+                        background-color: #0056b3;
+                        border-color: #0056b3;
+                    }
+
+                    .btn-secondary {
+                        background-color: #6c757d;
+                        border-color: #6c757d;
+                    }
+
+                    .btn-secondary:hover {
+                        background-color: #5a6268;
+                        border-color: #545b62;
+                    }
                 </style>
                 <div class="row">
                     <div class="col">
-                        <div style="width: 470px;" id="reader"></div>
+                        <div id="reader" style="width: 100%; max-width: 470px;"></div>
                     </div>
-                    <div class="col" style="padding: 20px;">
+                    <div class="col">
                         <h4>SCAN RESULT</h4>
-                        <div id="result">Result Here</div>
+                        <div id="result">Result will appear here</div>
                     </div>
                 </div>
+
                 <script type="text/javascript">
                     function onScanSuccess(qrCodeMessage) {
-                        const ApplicationIDMatch = qrCodeMessage.match(/ApplicationID:(\d{11})/);
+                        const ApplicationIDMatch = qrCodeMessage.match(/(APP-\d{12})/);
                         if (ApplicationIDMatch) {
                             const application_id = ApplicationIDMatch[1];
                             fetchDataFromServer(application_id);
@@ -45,39 +124,73 @@ include('../admin/assets/inc/navbar.php');
                             document.getElementById('result').innerHTML = '<span class="result">QR code does not contain a valid application ID</span>';
                         }
                     }
+
                     function onScanError(errorMessage) {
                         console.error('Scan error:', errorMessage);
                     }
+
                     function fetchDataFromServer(application_id) {
                         fetch('fetch_data.php', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                            body: new URLSearchParams({ 'application_id': application_id })
-                        })
-                        .then(response => response.json())
-                        .then(data => renderDataInTable(data))
-                        .catch(error => console.error('Error:', error));
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/x-www-form-urlencoded'
+                                },
+                                body: new URLSearchParams({
+                                    'application_id': application_id
+                                })
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                // Check the status in the response
+                                if (data.status === "success") {
+                                    // Call renderDataInTable if data is found
+                                    renderDataInTable(data);
+                                } else if (data.status === "error") {
+                                    // Show the error message if no data is found
+                                    document.getElementById('result').innerHTML = '<span class="result">' + data.message + '</span>';
+                                }
+                            })
+                            .catch(error => console.error('Error:', error));
                     }
+
                     function renderDataInTable(data) {
-                        if (!data || data.length === 0) {
-                            document.getElementById('result').innerHTML = '<span class="result">No data found</span>';
-                            return;
+                        // Check if data is valid
+                        if (data.status === "success" && data.data) {
+                            const application = data.data;
+                            let tableHtml = `
+            <table border="1">
+                <thead>
+                    <tr>
+                        <th>Field</th>
+                        <th>Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>Application Number</td><td>${application.application_number}</td></tr>
+                    <tr><td>Full Name</td><td>${application.fname} ${application.mname} ${application.lname}</td></tr>
+                    <tr><td>Address</td><td>${application.address}</td></tr>
+                    <tr><td>Business Address</td><td>${application.business_address}</td></tr>
+                    <tr><td>Business Name</td><td>${application.business_name}</td></tr>
+                    <tr><td>Business Type</td><td>${application.business_type}</td></tr>
+                    <tr><td>Date of Application</td><td>${application.date_application}</td></tr>
+                    <tr><td>Document Status</td><td>${application.document_status}</td></tr>
+                    <tr><td>Email</td><td>${application.email}</td></tr>
+                    <tr><td>Phone</td><td>${application.phone}</td></tr>
+                    <tr><td>Status</td><td>${application.application_status}</td></tr>
+                </tbody>
+            </table> `;
+                            // Insert the table into your page (e.g., a div with id 'result')
+                            document.getElementById('result').innerHTML = tableHtml;
+                        } else {
+                            document.getElementById('result').innerHTML = '<span class="result">Invalid data received from the server.</span>';
                         }
-                        let table = '<table><tr><th>Application ID</th><th>Owner</th><th>Business Name</th><th>Business Type</th><th>Address</th><th>Status</th></tr>';
-                        data.forEach(row => {
-                            table += `<tr>
-                                <td>${row.application_id}</td>
-                                <td>${row.owner_name}</td>
-                                <td>${row.business_name}</td>
-                                <td>${row.business_type}</td>
-                                <td>${row.address}</td>
-                                <td>${row.status}</td>
-                            </tr>`;
-                        });
-                        table += '</table>';
-                        document.getElementById('result').innerHTML = table;
                     }
-                    var html5QrcodeScanner = new Html5QrcodeScanner("reader", { fps: 10, qrbox: 250 });
+
+
+                    var html5QrcodeScanner = new Html5QrcodeScanner("reader", {
+                        fps: 10,
+                        qrbox: 250
+                    });
                     html5QrcodeScanner.render(onScanSuccess, onScanError);
                 </script>
             </div>
@@ -89,6 +202,47 @@ include('../admin/assets/inc/navbar.php');
     </div>
 </div>
 <!-- End QR code Modal -->
+
+<!-- Send Email Modal -->
+<div class="modal fade" id="sendEmailModal" tabindex="-1" aria-labelledby="sendEmailModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="sendEmailModalLabel">Send Email</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="text-center">
+                            <h5>Permit Details</h5>
+                            <p><strong>Business Name:</strong> <span id="permitBusinessName"></span></p>
+                            <p><strong>Owner:</strong> <span id="permitOwnerName"></span></p>
+                            <p><strong>Permit Type:</strong> <span id="permitType"></span></p>
+                        </div>
+                        <div class="text-center mt-4">
+                            <h5>Generated QR Code</h5>
+                            <img id="permitQRCode" class="d-none" alt="Generated QR Code" style="max-width: 300px; margin-top: 20px;">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="releaseEmail" class="form-label"><strong>Recipient Email</strong></label>
+                        <input type="email" id="releaseEmail" class="form-control" placeholder="Enter recipient email" required>
+
+                        <label for="releaseMessage" class="form-label mt-3"><strong>Custom Message</strong></label>
+                        <textarea id="releaseMessage" class="form-control" rows="4" placeholder="Enter a custom message (optional)"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary" id="generateQRCodeBtn">Generate QR Code</button>
+                <button type="button" class="btn btn-success" id="sendEmailBtn">Send Email</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Send Email Modal End -->
 
 <!-- Update Renewal Modal -->
 <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="true">
@@ -354,6 +508,101 @@ include('../admin/assets/inc/footer.php');
                     $('#displayDataTablePending').html(data);
                 }
             }
+        });
+    }
+
+    //send email modal
+    function sendEmail(userId) {
+        // Fetch user details via an AJAX POST request
+        $.post("admin_renewal_get_details.php", {
+            updateid: userId
+        }, function(data, status) {
+            // Parse the returned JSON data
+            var user = JSON.parse(data);
+
+            // Populate the fields in the Send Email Modal
+            $('#permitBusinessName').text(user.business_name);
+            $('#permitOwnerName').text(user.fname + ' ' + user.mname + ' ' + user.lname);
+            $('#permitType').text(user.business_type);
+            $('#permitExpiration').text(user.period_date);
+
+            // Auto-fill the recipient email
+            $('#releaseEmail').val(user.email);
+            // Store the application number for future use
+            var applicationNumber = user.application_number;
+
+            $(document).ready(function() {
+                // When modal is closed, hide the QR code image
+                $('#sendEmailModal').on('hidden.bs.modal', function() {
+                    $('#permitQRCode').addClass('d-none'); // Hide QR code image
+                    $('#permitQRCode').attr('src', ''); // Reset the image source
+                });
+
+                // Handle form submission to generate the QR code
+                $('#generateQRCodeBtn').click(function() {
+                    const email = $('#releaseEmail').val();
+
+                    // Send the email to generate QR code
+                    $.post('generate_qr.php', {
+                        application_number: applicationNumber
+                    }, function(response) {
+                        if (response.success) {
+                            $('#permitQRCode').attr('src', response.qr_code_base64).removeClass('d-none'); // Show the QR code
+                        } else {
+                            alert('Error: ' + response.message);
+                        }
+                    }, 'json');
+                });
+            });
+
+            // Handle "Send Email" button click
+            $('#sendEmailBtn').click(function() {
+                const recipientEmail = $('#releaseEmail').val();
+                const customMessage = $('#releaseMessage').val();
+                const qrCodeBase64 = $('#permitQRCode').attr('src');
+                const businessName = $('#permitBusinessName').text();
+                const ownerName = $('#permitOwnerName').text();
+                const permitType = $('#permitType').text();
+
+                // Validate that required fields are filled
+                if (!recipientEmail || !qrCodeBase64) {
+                    alert("Please provide the required information (recipient email and QR code).");
+                    return;
+                }
+
+                // Prepare the data to send to the backend
+                const data = {
+                    recipient_email: recipientEmail,
+                    qr_code_base64: qrCodeBase64,
+                    custom_message: customMessage, // Optional
+                    business_name: businessName,
+                    owner_name: ownerName,
+                    permit_type: permitType
+                };
+
+                // Send the data to the backend using AJAX (Fetch API)
+                $.ajax({
+                    url: 'send_email.php',
+                    method: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(data),
+                    success: function(response) {
+                        if (response.success) {
+                            alert("Email sent successfully!");
+                            // Close the modal after successful email sending
+                            $('#sendEmailModal').modal('hide');
+                        } else {
+                            alert("Failed to send email: " + response.message);
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        alert("Error sending email: " + error);
+                    }
+                });
+            });
+
+            // Show the Send Email Modal
+            $('#sendEmailModal').modal("show");
         });
     }
 

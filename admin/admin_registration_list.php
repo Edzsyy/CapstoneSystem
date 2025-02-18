@@ -13,48 +13,111 @@ include('../admin/assets/inc/navbar.php');
 
 <!-- QR code Scanner Modal -->
 <div class="modal fade" id="qrcodeModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">QR Code</h1>
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content rounded-4 shadow">
+            <div class="modal-header border-0">
+                <h1 class="modal-title fs-4 fw-bold" id="exampleModalLabel">Scan QR Code</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body p-4">
                 <script src="../admin/assets/js/html5-qrcode.min.js"></script>
                 <style>
-                    .result {
-                        background-color: green;
-                        color: #fff;
-                        padding: 20px;
+                    #qrcodeModal .result {
+
+                        color: #007bff;
+                        padding: 15px;
+                        border-radius: 8px;
+                        font-weight: bold;
                     }
 
-                    .row {
+                    #qrcodeModal .row {
                         display: flex;
+                        gap: 20px;
                     }
 
-                    table {
+                    #qrcodeModal .col {
+                        flex: 1;
+                    }
+
+                    #qrcodeModal #reader {
+                        border-radius: 10px;
+                        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+                        overflow: hidden;
+                    }
+
+                    #qrcodeModal h4 {
+                        font-size: 1.25rem;
+                        margin-bottom: 10px;
+                    }
+
+                    #qrcodeModal #result {
+                        font-size: 1rem;
+                        padding: 15px;
+                        background-color: #f5f5f5;
+                        border-radius: 8px;
+                        border: 1px solid #ddd;
+                        margin-top: 10px;
+                        word-wrap: break-word;
+                    }
+
+                    #qrcodeModal table {
                         width: 100%;
                         border-collapse: collapse;
+                        margin-top: 15px;
                     }
 
-                    th,
-                    td {
-                        padding: 10px;
-                        border: 1px solid #ddd;
+                    #qrcodeModal th,
+                    #qrcodeModal td {
+                        padding: 12px;
+                        text-align: left;
+                    }
+
+                    #qrcodeModal th {
+                        background-color: #f1f1f1;
+                        font-weight: bold;
+                    }
+
+                    #qrcodeModal td {
+                        background-color: #fff;
+                    }
+
+                    #qrcodeModal .modal-footer {
+                        border-top: 1px solid #ddd;
+                    }
+
+                    #qrcodeModal .btn-primary {
+                        background-color: #007bff;
+                        border-color: #007bff;
+                    }
+
+                    #qrcodeModal .btn-primary:hover {
+                        background-color: #0056b3;
+                        border-color: #0056b3;
+                    }
+
+                    #qrcodeModal .btn-secondary {
+                        background-color: #6c757d;
+                        border-color: #6c757d;
+                    }
+
+                    #qrcodeModal .btn-secondary:hover {
+                        background-color: #5a6268;
+                        border-color: #545b62;
                     }
                 </style>
                 <div class="row">
                     <div class="col">
-                        <div style="width: 470px;" id="reader"></div>
+                        <div id="reader" style="width: 100%; max-width: 470px;"></div>
                     </div>
-                    <div class="col" style="padding: 20px;">
+                    <div class="col">
                         <h4>SCAN RESULT</h4>
-                        <div id="result">Result Here</div>
+                        <div id="result">Result will appear here</div>
                     </div>
                 </div>
+
                 <script type="text/javascript">
                     function onScanSuccess(qrCodeMessage) {
-                        const ApplicationIDMatch = qrCodeMessage.match(/ApplicationID:(\d{11})/);
+                        const ApplicationIDMatch = qrCodeMessage.match(/(APP-\d{12})/);
                         if (ApplicationIDMatch) {
                             const application_id = ApplicationIDMatch[1];
                             fetchDataFromServer(application_id);
@@ -78,29 +141,53 @@ include('../admin/assets/inc/navbar.php');
                                 })
                             })
                             .then(response => response.json())
-                            .then(data => renderDataInTable(data))
+                            .then(data => {
+                                // Check the status in the response
+                                if (data.status === "success") {
+                                    // Call renderDataInTable if data is found
+                                    renderDataInTable(data);
+                                } else if (data.status === "error") {
+                                    // Show the error message if no data is found
+                                    document.getElementById('result').innerHTML = '<span class="result">' + data.message + '</span>';
+                                }
+                            })
                             .catch(error => console.error('Error:', error));
                     }
 
                     function renderDataInTable(data) {
-                        if (!data || data.length === 0) {
-                            document.getElementById('result').innerHTML = '<span class="result">No data found</span>';
-                            return;
+                        // Check if data is valid
+                        if (data.status === "success" && data.data) {
+                            const application = data.data;
+                            let tableHtml = `
+            <table border="1">
+                <thead>
+                    <tr>
+                        <th>Field</th>
+                        <th>Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>Application Number</td><td>${application.application_number}</td></tr>
+                    <tr><td>Full Name</td><td>${application.fname} ${application.mname} ${application.lname}</td></tr>
+                    <tr><td>Address</td><td>${application.address}</td></tr>
+                    <tr><td>Business Address</td><td>${application.business_address}</td></tr>
+                    <tr><td>Business Name</td><td>${application.business_name}</td></tr>
+                    <tr><td>Business Type</td><td>${application.business_type}</td></tr>
+                    <tr><td>Date of Application</td><td>${application.date_application}</td></tr>
+                    <tr><td>Document Status</td><td>${application.document_status}</td></tr>
+                    <tr><td>Email</td><td>${application.email}</td></tr>
+                    <tr><td>Phone</td><td>${application.phone}</td></tr>
+                    <tr><td>Status</td><td>${application.application_status}</td></tr>
+                </tbody>
+            </table> `;
+                            // Insert the table into your page (e.g., a div with id 'result')
+                            document.getElementById('result').innerHTML = tableHtml;
+                        } else {
+                            document.getElementById('result').innerHTML = '<span class="result">Invalid data received from the server.</span>';
                         }
-                        let table = '<table><tr><th>Application ID</th><th>Owner</th><th>Business Name</th><th>Business Type</th><th>Address</th><th>Status</th></tr>';
-                        data.forEach(row => {
-                            table += `<tr>
-                                <td>${row.application_id}</td>
-                                <td>${row.owner_name}</td>
-                                <td>${row.business_name}</td>
-                                <td>${row.business_type}</td>
-                                <td>${row.address}</td>
-                                <td>${row.status}</td>
-                            </tr>`;
-                        });
-                        table += '</table>';
-                        document.getElementById('result').innerHTML = table;
                     }
+
+
                     var html5QrcodeScanner = new Html5QrcodeScanner("reader", {
                         fps: 10,
                         qrbox: 250
@@ -116,6 +203,7 @@ include('../admin/assets/inc/navbar.php');
     </div>
 </div>
 <!-- End QR code Modal -->
+
 
 <!-- Update Registration Modal -->
 <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="true">
@@ -183,12 +271,12 @@ include('../admin/assets/inc/navbar.php');
                     <label for="updateRentPerMonth" class="form-label">Rent Per Month</label>
                     <input type="text" class="form-control" id="updateRentPerMonth">
                 </div>
-               
+
                 <div class="mb-3">
                     <label for="updateDateofApplication" class="form-label">Date of Application</label>
                     <input type="date" class="form-control" id="updateDateofApplication">
                 </div>
-                
+
                 <!-- File Upload Inputs -->
                 <div class="mb-3">
                     <label for="updateUploadDti" class="form-label">Upload DTI</label>
@@ -237,23 +325,23 @@ include('../admin/assets/inc/navbar.php');
                         </div>
                     </div>
                     <div class="col-md-6">
-                    <p><strong>First Name:</strong> <span id="viewFirstname"></span></p>
-                            <p><strong>Middle Name:</strong> <span id="viewMiddlename"></span></p>
-                            <p><strong>Last Name:</strong> <span id="viewLastname"></span></p>
-                            <p><strong>Email:</strong> <span id="viewEmail"></span></p>
-                            <p><strong>Phone:</strong> <span id="viewPhone"></span></p>
-                            <p><strong>Address:</strong> <span id="viewAddress"></span></p>
-                            <p><strong>Zip Code:</strong> <span id="viewZip"></span></p>
-                            <p><strong>Business Name:</strong> <span id="viewBusinessName"></span></p>
-                            <p><strong>Business Address:</strong> <span id="viewBusinessAddress"></span></p>
-                            <p><strong>Building Name:</strong> <span id="viewBuildingName"></span></p>
-                            <p><strong>Building No:</strong> <span id="viewBuildingNo"></span></p>
-                            <p><strong>Street:</strong> <span id="viewStreet"></span></p>
-                            <p><strong>Barangay:</strong> <span id="viewBarangay"></span></p>
-                            <p><strong>Business Type:</strong> <span id="viewBusinessType"></span></p>
-                            <p><strong>Rent per Month:</strong> <span id="viewRentPerMonth"></span></p>
-                            <p><strong>Date of Application:</strong> <span id="viewDateofApplication"></span></p>
-                            <p><strong>application_number:</strong> <span id="viewapplication_number"></span></p>
+                        <p><strong>First Name:</strong> <span id="viewFirstname"></span></p>
+                        <p><strong>Middle Name:</strong> <span id="viewMiddlename"></span></p>
+                        <p><strong>Last Name:</strong> <span id="viewLastname"></span></p>
+                        <p><strong>Email:</strong> <span id="viewEmail"></span></p>
+                        <p><strong>Phone:</strong> <span id="viewPhone"></span></p>
+                        <p><strong>Address:</strong> <span id="viewAddress"></span></p>
+                        <p><strong>Zip Code:</strong> <span id="viewZip"></span></p>
+                        <p><strong>Business Name:</strong> <span id="viewBusinessName"></span></p>
+                        <p><strong>Business Address:</strong> <span id="viewBusinessAddress"></span></p>
+                        <p><strong>Building Name:</strong> <span id="viewBuildingName"></span></p>
+                        <p><strong>Building No:</strong> <span id="viewBuildingNo"></span></p>
+                        <p><strong>Street:</strong> <span id="viewStreet"></span></p>
+                        <p><strong>Barangay:</strong> <span id="viewBarangay"></span></p>
+                        <p><strong>Business Type:</strong> <span id="viewBusinessType"></span></p>
+                        <p><strong>Rent per Month:</strong> <span id="viewRentPerMonth"></span></p>
+                        <p><strong>Date of Application:</strong> <span id="viewDateofApplication"></span></p>
+                        <p><strong>application_number:</strong> <span id="viewapplication_number"></span></p>
                         <p><strong>Status:</strong> <span id="viewDocumentStatus"></span></p> <!-- Added Status -->
                     </div>
                 </div>
@@ -312,7 +400,7 @@ include('../admin/assets/inc/navbar.php');
                 <li class="nav-item">
                     <a class="nav-link" data-bs-toggle="tab" href="#pending" onclick="filterData('Pending')">Pending</a>
                 </li>
-                
+
             </ul>
 
             <div class="tab-content">
@@ -325,7 +413,7 @@ include('../admin/assets/inc/navbar.php');
                 <div class="tab-pane fade" id="pending">
                     <div id="displayDataTablePending"></div>
                 </div>
-                
+
             </div>
         </div>
     </div>
@@ -620,7 +708,9 @@ include('../admin/assets/inc/footer.php');
 
     // view function for displaying user details including image files
     function viewDetails(viewid) {
-        $.post("admin_registration_list_view.php", { viewid: viewid }, function(data, status) {
+        $.post("admin_registration_list_view.php", {
+            viewid: viewid
+        }, function(data, status) {
             var user = JSON.parse(data);
 
             if (user.error) {
@@ -689,87 +779,85 @@ include('../admin/assets/inc/footer.php');
         $('#imageViewModal').modal('show');
     }
 
-   
-   // Function to update the document status
-   function updateDocumentStatus(status) {
-            var viewId = $('#hiddendata').val(); // Get the hidden view ID
 
-            if (!viewId || !status) {
+    // Function to update the document status
+    function updateDocumentStatus(status) {
+        var viewId = $('#hiddendata').val(); // Get the hidden view ID
+
+        if (!viewId || !status) {
             alert("View ID or Document Status is missing.");
             return;
-            }
+        }
 
-            $.post("admin_registration_list_update_status.php", 
-            {
-            viewid: viewId,
-            document_status: status
-            }, 
-        function(data) {
-            console.log("Response:", data);
-            if (data.success) {
-                $('#viewDocumentStatus').text(status);
-                alert("Document status updated to " + status);
-                $('#viewModal').modal('hide');
-                filterData('All'); // Refresh the list
+        $.post("admin_registration_list_update_status.php", {
+                    viewid: viewId,
+                    document_status: status
+                },
+                function(data) {
+                    console.log("Response:", data);
+                    if (data.success) {
+                        $('#viewDocumentStatus').text(status);
+                        alert("Document status updated to " + status);
+                        $('#viewModal').modal('hide');
+                        filterData('All'); // Refresh the list
 
-                if (status === 'Rejected') {
-                    alert("Your document was rejected. Please refill the renewal update form.");
-                } else if (status === 'Approved') {
-                    $('#releaseButton').show(); // Show the release button only after approval
-                    alert("Application has been approved. You can now release it.");
-                }
-            } else {
-                alert("Failed to update the document status: " + data.error);
-            }
-        }, "json")
-        .fail(function(jqXHR, textStatus, errorThrown) {
-            console.error("AJAX request failed: " + textStatus + ", " + errorThrown);
-            alert("AJAX request failed: " + textStatus);
-        });
+                        if (status === 'Rejected') {
+                            alert("Your document was rejected. Please refill the renewal update form.");
+                        } else if (status === 'Approved') {
+                            $('#releaseButton').show(); // Show the release button only after approval
+                            alert("Application has been approved. You can now release it.");
+                        }
+                    } else {
+                        alert("Failed to update the document status: " + data.error);
+                    }
+                }, "json")
+            .fail(function(jqXHR, textStatus, errorThrown) {
+                console.error("AJAX request failed: " + textStatus + ", " + errorThrown);
+                alert("AJAX request failed: " + textStatus);
+            });
     }
 
 
-   // Function to release the application
-   function releaseApplication() {
-            var viewId = $('#hiddendata').val(); // Get the hidden view ID
+    // Function to release the application
+    function releaseApplication() {
+        var viewId = $('#hiddendata').val(); // Get the hidden view ID
 
-            if (!viewId) {
-                alert("View ID is missing.");
-                return;
-            }
+        if (!viewId) {
+            alert("View ID is missing.");
+            return;
+        }
 
-            // Disable the button to prevent multiple clicks
-            $('#releaseButton').prop('disabled', true);
+        // Disable the button to prevent multiple clicks
+        $('#releaseButton').prop('disabled', true);
 
-            // Update only application_status to "Released"
-            $.post("admin_registration_list_update_status.php", 
-            {
-                viewid: viewId,
-                application_status: 'Released'  // Ensure only application_status is updated
-            }, 
-            function(data) {
-                console.log("Response:", data);
-                if (data.success) {
-                    $('#viewApplicationStatus').text('Released'); // Update application status in UI
-                    alert("Application has been successfully released.");
-                    $('#releaseButton').hide(); // Hide the button after releasing
-                    $('#viewModal').modal('hide'); // Close the modal
-                    filterData('All'); // Refresh the table
-                } else {
-                    alert("Failed to release the application: " + data.error);
-                    $('#releaseButton').prop('disabled', false); // Re-enable the button
-                }
-            }, "json")
+        // Update only application_status to "Released"
+        $.post("admin_registration_list_update_status.php", {
+                    viewid: viewId,
+                    application_status: 'Released' // Ensure only application_status is updated
+                },
+                function(data) {
+                    console.log("Response:", data);
+                    if (data.success) {
+                        $('#viewApplicationStatus').text('Released'); // Update application status in UI
+                        alert("Application has been successfully released.");
+                        $('#releaseButton').hide(); // Hide the button after releasing
+                        $('#viewModal').modal('hide'); // Close the modal
+                        filterData('All'); // Refresh the table
+                    } else {
+                        alert("Failed to release the application: " + data.error);
+                        $('#releaseButton').prop('disabled', false); // Re-enable the button
+                    }
+                }, "json")
             .fail(function(jqXHR, textStatus, errorThrown) {
                 console.error("AJAX request failed: " + textStatus + ", " + errorThrown);
                 alert("AJAX request failed: " + textStatus);
                 $('#releaseButton').prop('disabled', false); // Re-enable the button
             });
-        }
+    }
 
     // Event listener for updating document status
     $(document).on('click', '.update-status-btn', function() {
-        var viewid = $('#hiddendata').val();  // Get the hidden input ID
+        var viewid = $('#hiddendata').val(); // Get the hidden input ID
         var newStatus = $(this).data('status'); // Get the status from button data attribute
 
         if (viewid) {
@@ -778,7 +866,6 @@ include('../admin/assets/inc/footer.php');
             alert("Error: Missing record ID.");
         }
     });
-
 </script>
 
 
