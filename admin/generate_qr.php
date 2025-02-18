@@ -5,24 +5,34 @@ use Endroid\QrCode\Builder\Builder;
 use Endroid\QrCode\Encoding\Encoding;
 use Endroid\QrCode\ErrorCorrectionLevel;
 use Endroid\QrCode\Writer\PngWriter;
+use Endroid\QrCode\Label\LabelAlignment;
+use Endroid\QrCode\Label\Font\OpenSans;
+use Endroid\QrCode\RoundBlockSizeMode;
+
 
 header('Content-Type: application/json');
 
 try {
-    if (!isset($_POST['email'])) {
-        throw new Exception('Missing email.');
+    if (!isset($_POST['application_number'])) {
+        throw new Exception('Missing application number.');
     }
 
-    $email = $_POST['email'];
+    $applicationNumber = $_POST['application_number'];
 
     // Generate the QR code with the email
     $builder = new Builder(
         writer: new PngWriter(),
-        data: $email, // Use the email address as the data for the QR code
+        data: $applicationNumber, 
         encoding: new Encoding('UTF-8'),
         errorCorrectionLevel: ErrorCorrectionLevel::High,
-        size: 300,
-        margin: 10
+        size: 600,
+        margin: 20,
+        labelText: 'Use this QR code to claim your business permit', 
+        labelFont: new OpenSans(20),
+        labelAlignment: LabelAlignment::Center,
+        logoPath: __DIR__.'/assets/image/logo.jpg',
+        logoResizeToWidth: 100,
+        logoPunchoutBackground: true,
     );
 
     $result = $builder->build();

@@ -347,7 +347,6 @@ include('../admin/assets/inc/navbar.php');
                             <p><strong>Business Name:</strong> <span id="permitBusinessName"></span></p>
                             <p><strong>Owner:</strong> <span id="permitOwnerName"></span></p>
                             <p><strong>Permit Type:</strong> <span id="permitType"></span></p>
-                            <p><strong>Expiration Date:</strong> <span id="permitExpiration"></span></p>
                         </div>
                         <div class="text-center mt-4">
                             <h5>Generated QR Code</h5>
@@ -371,7 +370,7 @@ include('../admin/assets/inc/navbar.php');
         </div>
     </div>
 </div>
-<!-- Send Email Modal End -->"
+<!-- Send Email Modal End -->
 
 
 
@@ -426,6 +425,8 @@ include('../admin/assets/inc/footer.php');
 
             // Auto-fill the recipient email
             $('#releaseEmail').val(user.email);
+            // Store the application number for future use
+            var applicationNumber = user.application_number;
 
             $(document).ready(function() {
                 // When modal is closed, hide the QR code image
@@ -439,8 +440,8 @@ include('../admin/assets/inc/footer.php');
                     const email = $('#releaseEmail').val();
 
                     // Send the email to generate QR code
-                    $.post('send_qr_email.php', {
-                        email: email
+                    $.post('generate_qr.php', {
+                        application_number: applicationNumber
                     }, function(response) {
                         if (response.success) {
                             $('#permitQRCode').attr('src', response.qr_code_base64).removeClass('d-none'); // Show the QR code
@@ -448,6 +449,52 @@ include('../admin/assets/inc/footer.php');
                             alert('Error: ' + response.message);
                         }
                     }, 'json');
+                });
+            });
+
+            // Handle "Send Email" button click
+            $('#sendEmailBtn').click(function() {
+                const recipientEmail = $('#releaseEmail').val();
+                const customMessage = $('#releaseMessage').val();
+                const qrCodeBase64 = $('#permitQRCode').attr('src');
+                const businessName = $('#permitBusinessName').text();
+                const ownerName = $('#permitOwnerName').text();
+                const permitType = $('#permitType').text();
+
+                // Validate that required fields are filled
+                if (!recipientEmail || !qrCodeBase64) {
+                    alert("Please provide the required information (recipient email and QR code).");
+                    return;
+                }
+
+                // Prepare the data to send to the backend
+                const data = {
+                    recipient_email: recipientEmail,
+                    qr_code_base64: qrCodeBase64,
+                    custom_message: customMessage, // Optional
+                    business_name: businessName,
+                    owner_name: ownerName,
+                    permit_type: permitType
+                };
+
+                // Send the data to the backend using AJAX (Fetch API)
+                $.ajax({
+                    url: 'send_email.php',
+                    method: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(data),
+                    success: function(response) {
+                        if (response.success) {
+                            alert("Email sent successfully!");
+                            // Close the modal after successful email sending
+                            $('#sendEmailModal').modal('hide');
+                        } else {
+                            alert("Failed to send email: " + response.message);
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        alert("Error sending email: " + error);
+                    }
                 });
             });
 
