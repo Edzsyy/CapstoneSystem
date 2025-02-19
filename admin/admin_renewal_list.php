@@ -21,7 +21,7 @@ include('../admin/assets/inc/navbar.php');
             <div class="modal-body p-4">
                 <script src="../admin/assets/js/html5-qrcode.min.js"></script>
                 <style>
-                    .result {
+                    #qrcodeModal .result {
 
                         color: #007bff;
                         padding: 15px;
@@ -29,27 +29,27 @@ include('../admin/assets/inc/navbar.php');
                         font-weight: bold;
                     }
 
-                    .row {
+                    #qrcodeModal .row {
                         display: flex;
                         gap: 20px;
                     }
 
-                    .col {
+                    #qrcodeModal .col {
                         flex: 1;
                     }
 
-                    #reader {
+                    #qrcodeModal #reader {
                         border-radius: 10px;
                         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
                         overflow: hidden;
                     }
 
-                    h4 {
+                    #qrcodeModal h4 {
                         font-size: 1.25rem;
                         margin-bottom: 10px;
                     }
 
-                    #result {
+                    #qrcodeModal #result {
                         font-size: 1rem;
                         padding: 15px;
                         background-color: #f5f5f5;
@@ -59,47 +59,47 @@ include('../admin/assets/inc/navbar.php');
                         word-wrap: break-word;
                     }
 
-                    table {
+                    #qrcodeModal table {
                         width: 100%;
                         border-collapse: collapse;
                         margin-top: 15px;
                     }
 
-                    th,
-                    td {
+                    #qrcodeModal th,
+                    #qrcodeModal td {
                         padding: 12px;
                         text-align: left;
                     }
 
-                    th {
+                    #qrcodeModal th {
                         background-color: #f1f1f1;
                         font-weight: bold;
                     }
 
-                    td {
+                    #qrcodeModal td {
                         background-color: #fff;
                     }
 
-                    .modal-footer {
+                    #qrcodeModal .modal-footer {
                         border-top: 1px solid #ddd;
                     }
 
-                    .btn-primary {
+                    #qrcodeModal .btn-primary {
                         background-color: #007bff;
                         border-color: #007bff;
                     }
 
-                    .btn-primary:hover {
+                    #qrcodeModal .btn-primary:hover {
                         background-color: #0056b3;
                         border-color: #0056b3;
                     }
 
-                    .btn-secondary {
+                    #qrcodeModal .btn-secondary {
                         background-color: #6c757d;
                         border-color: #6c757d;
                     }
 
-                    .btn-secondary:hover {
+                    #qrcodeModal .btn-secondary:hover {
                         background-color: #5a6268;
                         border-color: #545b62;
                     }
@@ -115,10 +115,12 @@ include('../admin/assets/inc/navbar.php');
                 </div>
 
                 <script type="text/javascript">
+                    let application_id = null;
+
                     function onScanSuccess(qrCodeMessage) {
                         const ApplicationIDMatch = qrCodeMessage.match(/(APP-\d{12})/);
                         if (ApplicationIDMatch) {
-                            const application_id = ApplicationIDMatch[1];
+                            application_id = ApplicationIDMatch[1];
                             fetchDataFromServer(application_id);
                         } else {
                             document.getElementById('result').innerHTML = '<span class="result">QR code does not contain a valid application ID</span>';
@@ -186,6 +188,42 @@ include('../admin/assets/inc/navbar.php');
                         }
                     }
 
+                    // Function to handle document release
+                    function releaseDocument() {
+                        if (!application_id) {
+                            alert('No application ID found.');
+                            return;
+                        }
+
+                        // Get current date and time
+                        const currentDateTime = new Date().toISOString(); // ISO format: "YYYY-MM-DDTHH:MM:SSZ"
+
+                        fetch('release_doc.php', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/x-www-form-urlencoded'
+                            },
+                            body: new URLSearchParams({
+                                'application_id': application_id,
+                                'status': 'released',
+                                'release_date': currentDateTime,
+                            })
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.status === "success") {
+                                // Update the UI with the new document status
+                                document.getElementById('result').innerHTML = `<span class="result">Document has been released.</span>`;
+                            } else {
+                                document.getElementById('result').innerHTML = `<span class="result">${data.message}</span>`;
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            document.getElementById('result').innerHTML = `<span class="result">Failed to release document.</span>`;
+                        });
+                    }
+
 
                     var html5QrcodeScanner = new Html5QrcodeScanner("reader", {
                         fps: 10,
@@ -195,54 +233,13 @@ include('../admin/assets/inc/navbar.php');
                 </script>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" onclick="qrcode()">Submit</button>
+                <button type="button" class="btn btn-primary" onclick="releaseDocument()">Release Document</button>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
 </div>
 <!-- End QR code Modal -->
-
-<!-- Send Email Modal -->
-<div class="modal fade" id="sendEmailModal" tabindex="-1" aria-labelledby="sendEmailModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="sendEmailModalLabel">Send Email</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="text-center">
-                            <h5>Permit Details</h5>
-                            <p><strong>Business Name:</strong> <span id="permitBusinessName"></span></p>
-                            <p><strong>Owner:</strong> <span id="permitOwnerName"></span></p>
-                            <p><strong>Permit Type:</strong> <span id="permitType"></span></p>
-                        </div>
-                        <div class="text-center mt-4">
-                            <h5>Generated QR Code</h5>
-                            <img id="permitQRCode" class="d-none" alt="Generated QR Code" style="max-width: 300px; margin-top: 20px;">
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <label for="releaseEmail" class="form-label"><strong>Recipient Email</strong></label>
-                        <input type="email" id="releaseEmail" class="form-control" placeholder="Enter recipient email" required>
-
-                        <label for="releaseMessage" class="form-label mt-3"><strong>Custom Message</strong></label>
-                        <textarea id="releaseMessage" class="form-control" rows="4" placeholder="Enter a custom message (optional)"></textarea>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="submit" class="btn btn-primary" id="generateQRCodeBtn">Generate QR Code</button>
-                <button type="button" class="btn btn-success" id="sendEmailBtn">Send Email</button>
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Send Email Modal End -->
 
 <!-- Update Renewal Modal -->
 <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="true">
@@ -478,7 +475,46 @@ include('../admin/assets/inc/navbar.php');
     </div>
 </div>
 
+<!-- Send Email Modal -->
+<div class="modal fade" id="sendEmailModal" tabindex="-1" aria-labelledby="sendEmailModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="sendEmailModalLabel">Send Email</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="text-center">
+                            <h5>Permit Details</h5>
+                            <p><strong>Business Name:</strong> <span id="permitBusinessName"></span></p>
+                            <p><strong>Owner:</strong> <span id="permitOwnerName"></span></p>
+                            <p><strong>Permit Type:</strong> <span id="permitType"></span></p>
+                        </div>
+                        <div class="text-center mt-4">
+                            <h5>Generated QR Code</h5>
+                            <img id="permitQRCode" class="d-none" alt="Generated QR Code" style="max-width: 300px; margin-top: 20px;">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="releaseEmail" class="form-label"><strong>Recipient Email</strong></label>
+                        <input type="email" id="releaseEmail" class="form-control" placeholder="Enter recipient email" required>
 
+                        <label for="releaseMessage" class="form-label mt-3"><strong>Custom Message</strong></label>
+                        <textarea id="releaseMessage" class="form-control" rows="4" placeholder="Enter a custom message (optional)"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary" id="generateQRCodeBtn">Generate QR Code</button>
+                <button type="button" class="btn btn-success" id="sendEmailBtn">Send Email</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Send Email Modal End -->
 
 
 

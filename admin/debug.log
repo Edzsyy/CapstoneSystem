@@ -130,3 +130,9 @@ POST Data: Array
     [application_status] => Released
 )
 
+POST Data: Array
+(
+    [viewid] => 97
+    [document_status] => Rejected
+)
+

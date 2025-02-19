@@ -116,10 +116,12 @@ include('../admin/assets/inc/navbar.php');
                 </div>
 
                 <script type="text/javascript">
+                    let application_id = null;
+
                     function onScanSuccess(qrCodeMessage) {
                         const ApplicationIDMatch = qrCodeMessage.match(/(APP-\d{12})/);
                         if (ApplicationIDMatch) {
-                            const application_id = ApplicationIDMatch[1];
+                            application_id = ApplicationIDMatch[1];
                             fetchDataFromServer(application_id);
                         } else {
                             document.getElementById('result').innerHTML = '<span class="result">QR code does not contain a valid application ID</span>';
@@ -187,6 +189,42 @@ include('../admin/assets/inc/navbar.php');
                         }
                     }
 
+                    // Function to handle document release
+                    function releaseDocument() {
+                        if (!application_id) {
+                            alert('No application ID found.');
+                            return;
+                        }
+
+                        // Get current date and time
+                        const currentDateTime = new Date().toISOString(); // ISO format: "YYYY-MM-DDTHH:MM:SSZ"
+
+                        fetch('release_doc.php', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/x-www-form-urlencoded'
+                            },
+                            body: new URLSearchParams({
+                                'application_id': application_id,
+                                'status': 'released',
+                                'release_date': currentDateTime,
+                            })
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.status === "success") {
+                                // Update the UI with the new document status
+                                document.getElementById('result').innerHTML = `<span class="result">Document has been released.</span>`;
+                            } else {
+                                document.getElementById('result').innerHTML = `<span class="result">${data.message}</span>`;
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            document.getElementById('result').innerHTML = `<span class="result">Failed to release document.</span>`;
+                        });
+                    }
+
 
                     var html5QrcodeScanner = new Html5QrcodeScanner("reader", {
                         fps: 10,
@@ -196,7 +234,7 @@ include('../admin/assets/inc/navbar.php');
                 </script>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" onclick="qrcode()">Submit</button>
+                <button type="button" class="btn btn-primary" onclick="releaseDocument()">Release Document</button>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
