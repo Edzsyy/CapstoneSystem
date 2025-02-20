@@ -17,7 +17,7 @@
             <li><a href="admin_employee_list.php"><i class='bx bxs-user-plus icon'></i>Employee List</a></li>
             <li><a href="admin_user_list.php"><i class='bx bxs-user-plus icon'></i>User List</a></li>
             <li class="divider" data-text="settings">Settings</li>
-            <li><a href="admin_settings.php"><i class='bx bxs-cog icon' ></i>Settings</a></li>
+            <li><a href="../admin/r_and_d/ai_alert.php"><i class='bx bxs-cog icon' ></i>Settings</a></li>
         </ul>
         <div class="ads">
             <div class="wrapper">

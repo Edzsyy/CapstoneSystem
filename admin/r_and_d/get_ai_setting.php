@@ -3,7 +3,9 @@ session_start();
 header('Content-Type: application/json');
 include('../r_and_d/config/dbconn.php');
 
-$query = "SELECT notify_days, ai_message FROM ai_setting LIMIT 1";
+$query = "SELECT organization_name, contact_number, organization_address, website_link, 
+                 notify_days, notify_message, expired_message 
+          FROM ai_settings LIMIT 1";
 $result = $conn->query($query);
 
 if ($result->num_rows > 0) {
