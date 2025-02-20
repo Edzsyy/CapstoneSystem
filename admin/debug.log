@@ -136,3 +136,33 @@ POST Data: Array
     [document_status] => Rejected
 )
 
+POST Data: Array
+(
+    [viewid] => 1
+    [document_status] => Rejected
+)
+
+POST Data: Array
+(
+    [viewid] => 44
+    [document_status] => Approved
+)
+
+POST Data: Array
+(
+    [viewid] => 44
+    [application_status] => Released
+)
+
+POST Data: Array
+(
+    [viewid] => 85
+    [document_status] => Rejected
+)
+
+POST Data: Array
+(
+    [viewid] => 98
+    [document_status] => Rejected
+)
+
