@@ -49,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
 
         // Recipients
-        $mail->setFrom('no-reply@unifiedlgu.com', 'si Mayor to'); // Sender's email and name
+        $mail->setFrom('no-reply@unifiedlgu.com', 'LGU E-SERVICES'); // Sender's email and name
         $mail->addAddress($recipientEmail); // Add recipient
 
         // Content
